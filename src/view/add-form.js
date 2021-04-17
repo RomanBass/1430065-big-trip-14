@@ -1,14 +1,11 @@
-export const createEditFormTemplate = (tripPoint) => {
-  const {destination, basePrice, type, dateFrom, dateTo} = tripPoint;
-  const {description, name} = destination;
-
+export const createAddFormTemplate = () => {
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -71,9 +68,9 @@ export const createEditFormTemplate = (tripPoint) => {
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-          ${type}
+          Flight
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
@@ -83,10 +80,10 @@ export const createEditFormTemplate = (tripPoint) => {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom.format('DD')}/${dateFrom.format('MM')}/${dateFrom.format('YY')} ${dateFrom.format('HH')}:${dateFrom.format('mm')}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="19/03/19 00:00">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo.format('DD')}/${dateTo.format('MM')}/${dateTo.format('YY')} ${dateTo.format('HH')}:${dateTo.format('mm')}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="19/03/19 00:00">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -94,14 +91,11 @@ export const createEditFormTemplate = (tripPoint) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">
-        <span class="visually-hidden">Open event</span>
-      </button>
+      <button class="event__reset-btn" type="reset">Cancel</button>
     </header>
     <section class="event__details">
       <section class="event__section  event__section--offers">
@@ -113,16 +107,16 @@ export const createEditFormTemplate = (tripPoint) => {
             <label class="event__offer-label" for="event-offer-luggage-1">
               <span class="event__offer-title">Add luggage</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">50</span>
+              <span class="event__offer-price">30</span>
             </label>
           </div>
 
           <div class="event__offer-selector">
             <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
             <label class="event__offer-label" for="event-offer-comfort-1">
-              <span class="event__offer-title">Switch to comfort</span>
+              <span class="event__offer-title">Switch to comfort class</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">80</span>
+              <span class="event__offer-price">100</span>
             </label>
           </div>
 
@@ -153,11 +147,6 @@ export const createEditFormTemplate = (tripPoint) => {
             </label>
           </div>
         </div>
-      </section>
-
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
       </section>
     </section>
   </form>
