@@ -100,7 +100,7 @@ export const generateTripPoint = () => {
   const finishDate = startDate.add(getRandomInteger(0, 3), 'day').add(getRandomInteger(0, 23), 'hour').add(getRandomInteger(0, 59), 'minute');
 
   return {
-    basePrice: getRandomInteger(1000, 10000),
+    basePrice: getRandomInteger(100, 200),
     dateFrom: startDate,
     dateTo: finishDate,
     destination: {
