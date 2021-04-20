@@ -39,9 +39,13 @@ const getRouteDates = (array) => { // вернуть время маршрута
 };
 
 const getRouteName = (array) => { // вернуть имя маршрута
-  let routeName = `${array[0].destination.name} &mdash; ${array[array.length - 1].destination.name}` ;
+  let routeName = `${array[0].destination.name} ... ${array[array.length - 1].destination.name}` ;
   if (array.length == 3) {
     routeName = `${array[0].destination.name} &mdash; ${array[1].destination.name}  &mdash; ${array[2].destination.name}`;
+  } else if (array.length == 2) {
+    routeName = `${array[0].destination.name} &mdash; ${array[1].destination.name}`;
+  } else if (array.length == 1) {
+    routeName = `${array[0].destination.name}`;
   }
   return routeName;
 };
