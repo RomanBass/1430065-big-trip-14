@@ -10,6 +10,9 @@ import {createAddFormTemplate} from './view/add-form.js';
 import {createOptionTemplate} from './view/option.js';
 import {generateTripPoint} from './mock/trip-point.js';
 
+
+import {renderTemplate} from './utils.js';
+
 const TRIP_POINT_COUNT = 15;
 
 const tripPoints = new Array(TRIP_POINT_COUNT).fill().map(generateTripPoint); // массив точек маршрута
@@ -18,9 +21,9 @@ tripPoints.sort((a, b) => { // сортировка по dateFrom
   return (a.dateFrom - b.dateFrom);
 });
 
-const render = (container, template, place) => { // отрисовывает элементы в контейнеры с учётом расположения
-  container.insertAdjacentHTML(place, template);
-};
+// const render = (container, template, place) => { // отрисовывает элементы в контейнеры с учётом расположения
+//   container.insertAdjacentHTML(place, template);
+// };
 
 const getRoutePrice = (array) => { // вернуть стоимость маршрута
   let routePrice = 0;
@@ -39,7 +42,7 @@ const getRouteDates = (array) => { // вернуть время маршрута
 };
 
 const getRouteName = (array) => { // вернуть имя маршрута
-  let routeName = `${array[0].destination.name} ... ${array[array.length - 1].destination.name}` ;
+  let routeName = `${array[0].destination.name} &mdash; ... &mdash; ${array[array.length - 1].destination.name}` ;
   if (array.length == 3) {
     routeName = `${array[0].destination.name} &mdash; ${array[1].destination.name}  &mdash; ${array[2].destination.name}`;
   } else if (array.length == 2) {
@@ -61,21 +64,21 @@ const filtersElement = siteHeaderElement.querySelector('.trip-controls__filters'
 const tripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // отрисовки
-render(menuElement, createSiteMenuTemplate(), 'beforeend');
-render(tripElement, createInfoAndPriceTemplate(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), 'afterbegin');
-render(filtersElement, createFiltersTemplate(), 'beforeend');
-render(tripEventsElement, createSortingTemplate(), 'beforeend');
-render(tripEventsElement, createEventsList(), 'beforeend');
+renderTemplate(menuElement, createSiteMenuTemplate(), 'beforeend');
+renderTemplate(tripElement, createInfoAndPriceTemplate(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), 'afterbegin');
+renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
+renderTemplate(tripEventsElement, createSortingTemplate(), 'beforeend');
+renderTemplate(tripEventsElement, createEventsList(), 'beforeend');
 
 // контейнеры отрисованные в коде выше
 const tripEventsList = tripEventsElement.querySelector('.trip-events__list');
 
 // отрисовки внутри срендерЁнных контейнеров
-render(tripEventsList, createEditFormTemplate(tripPoints[0]), 'afterbegin'); // отрисовка формы редактирования точки
-render(tripEventsList, createAddFormTemplate(), 'beforeend'); // отрисовка формы создания точки
+renderTemplate(tripEventsList, createEditFormTemplate(tripPoints[0]), 'afterbegin'); // отрисовка формы редактирования точки
+renderTemplate(tripEventsList, createAddFormTemplate(), 'beforeend'); // отрисовка формы создания точки
 
 for (let i = 1; i < TRIP_POINT_COUNT; i++) { // отрисовка точек маршрута
-  render(tripEventsList, createTripPointTemplate(tripPoints[i]), 'beforeend');
+  renderTemplate(tripEventsList, createTripPointTemplate(tripPoints[i]), 'beforeend');
   //const optionsElement = tripEventsList.querySelector('.trip-events__item:last-child .event__selected-offers');
   //render(optionsElement, createOptionTemplate(), 'beforeend'); // отрисовка опций
   //console.log(optionsElement);
@@ -85,5 +88,5 @@ for (let i = 1; i < TRIP_POINT_COUNT; i++) { // отрисовка точек м
 const optionsBlockInEditForm = tripEventsElement.querySelector('.event__available-offers');
 optionsBlockInEditForm.innerHTML = '';
 for (let i = 0; i < tripPoints[0].offers.length; i++) {
-  render(optionsBlockInEditForm, createOptionTemplate(tripPoints[0].offers[i]), 'beforeend');
+  renderTemplate(optionsBlockInEditForm, createOptionTemplate(tripPoints[0].offers[i]), 'beforeend');
 }

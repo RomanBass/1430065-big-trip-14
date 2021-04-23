@@ -1,5 +1,6 @@
-import {getDuration} from '../mock/trip-point.js';
+import {getDuration} from '../utils.js';
 import {makeFavorite} from '../mock/trip-point.js';
+
 
 export const createTripPointTemplate = (tripPoint) => {
   const {basePrice, dateFrom, dateTo, type, destination, isFavorite} = tripPoint;
