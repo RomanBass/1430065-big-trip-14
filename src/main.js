@@ -1,4 +1,5 @@
-import {createSiteMenuTemplate} from './view/site-menu.js';
+// import {createSiteMenuTemplate} from './view/site-menu.js';
+import SiteMenuView from './view/site-menu.js';
 import {createInfoAndPriceTemplate} from './view/info-price.js';
 import {createFiltersTemplate} from './view/filter.js';
 import {createSortingTemplate} from './view/sorting.js';
@@ -10,8 +11,7 @@ import {createAddFormTemplate} from './view/add-form.js';
 import {createOptionTemplate} from './view/option.js';
 import {generateTripPoint} from './mock/trip-point.js';
 
-
-import {renderTemplate} from './utils.js';
+import {renderTemplate, renderElement, RenderPosition} from './utils.js';
 
 const TRIP_POINT_COUNT = 15;
 
@@ -64,7 +64,8 @@ const filtersElement = siteHeaderElement.querySelector('.trip-controls__filters'
 const tripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // отрисовки
-renderTemplate(menuElement, createSiteMenuTemplate(), 'beforeend');
+//renderTemplate(menuElement, createSiteMenuTemplate(), 'beforeend');
+renderElement(menuElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
 renderTemplate(tripElement, createInfoAndPriceTemplate(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), 'afterbegin');
 renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
 renderTemplate(tripEventsElement, createSortingTemplate(), 'beforeend');
