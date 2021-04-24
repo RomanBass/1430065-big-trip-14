@@ -1,10 +1,11 @@
 // import {createSiteMenuTemplate} from './view/site-menu.js';
 import SiteMenuView from './view/site-menu.js';
 // import {createInfoAndPriceTemplate} from './view/info-price.js';
-import InfoAndPrice from './view/info-price.js';
+import InfoAndPriceView from './view/info-price.js';
 //import {createFiltersTemplate} from './view/filter.js';
 import FilterView from './view/filter.js';
-import {createSortingTemplate} from './view/sorting.js';
+// import {createSortingTemplate} from './view/sorting.js';
+import SortingView from './view/sorting.js';
 //import {createEventsList} from './view/events-list.js';
 import EventsListView from './view/events-list.js';
 //import {createEditFormTemplate} from './view/edit-form.js';
@@ -13,7 +14,8 @@ import {createTripPointTemplate} from './view/trip-point.js';
 //import {createAddFormTemplate} from './view/add-form.js';
 import AddFormView from './view/add-form.js';
 //import {createSelectedOptionTemplate} from './view/selected-option.js';
-import {createOptionTemplate} from './view/option.js';
+// import {createOptionTemplate} from './view/option.js';
+import OptionView from './view/option.js';
 import {generateTripPoint} from './mock/trip-point.js';
 
 import {renderTemplate, renderElement, RenderPosition} from './utils.js';
@@ -72,10 +74,11 @@ const tripEventsElement = siteMainElement.querySelector('.trip-events');
 //renderTemplate(menuElement, createSiteMenuTemplate(), 'beforeend');
 renderElement(menuElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
 // renderTemplate(tripElement, createInfoAndPriceTemplate(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), 'afterbegin');
-renderElement(tripElement, new InfoAndPrice().getElement(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), RenderPosition.AFTERBEGIN);
+renderElement(tripElement, new InfoAndPriceView().getElement(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), RenderPosition.AFTERBEGIN);
 // renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
 renderElement(filtersElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
-renderTemplate(tripEventsElement, createSortingTemplate(), 'beforeend');
+// renderTemplate(tripEventsElement, createSortingTemplate(), 'beforeend');
+renderElement(tripEventsElement, new SortingView().getElement(), RenderPosition.BEFOREEND);
 //renderTemplate(tripEventsElement, createEventsList(), 'beforeend');
 renderElement(tripEventsElement, new EventsListView().getElement(), RenderPosition.BEFOREEND);
 
@@ -99,5 +102,6 @@ for (let i = 1; i < TRIP_POINT_COUNT; i++) { // отрисовка точек м
 const optionsBlockInEditForm = tripEventsElement.querySelector('.event__available-offers');
 optionsBlockInEditForm.innerHTML = '';
 for (let i = 0; i < tripPoints[0].offers.length; i++) {
-  renderTemplate(optionsBlockInEditForm, createOptionTemplate(tripPoints[0].offers[i]), 'beforeend');
+  // renderTemplate(optionsBlockInEditForm, createOptionTemplate(tripPoints[0].offers[i]), 'beforeend');
+  renderElement(optionsBlockInEditForm, new OptionView().getElement(tripPoints[0].offers[i]), RenderPosition.BEFOREEND);
 }

@@ -1,4 +1,6 @@
-export const createOptionTemplate = (tripPoint) => {
+import {createElement} from '../utils.js';
+
+const createOptionTemplate = (tripPoint) => {
   const {title, price} = tripPoint;
 
   return `<div class="event__offer-selector">
@@ -10,3 +12,25 @@ export const createOptionTemplate = (tripPoint) => {
   </label>
 </div>`;
 };
+
+export default class Option {
+  constuctor() {
+    this._element = null;
+  }
+
+  getTemplate(tripPoint) {
+    return createOptionTemplate(tripPoint);
+  }
+
+  getElement(tripPoint) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(tripPoint));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
