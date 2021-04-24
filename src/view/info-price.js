@@ -1,4 +1,6 @@
-export const createInfoAndPriceTemplate = (price, date, name) => {
+import {createElement} from '../utils.js';
+
+const createInfoAndPriceTemplate = (price, date, name) => {
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${name}</h1>
@@ -9,5 +11,25 @@ export const createInfoAndPriceTemplate = (price, date, name) => {
   </p>
 </section>`;
 };
-// Mar 18&nbsp;&mdash;&nbsp;20
-// Amsterdam &mdash; Chamonix &mdash; Geneva
+
+export default class InfoAndPrice {
+  constuctor() {
+    this._element = null;
+  }
+
+  getTemplate(price, date, name) {
+    return createInfoAndPriceTemplate(price, date, name);
+  }
+
+  getElement(price, date, name) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(price, date, name));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

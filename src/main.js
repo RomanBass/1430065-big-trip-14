@@ -1,10 +1,14 @@
 // import {createSiteMenuTemplate} from './view/site-menu.js';
 import SiteMenuView from './view/site-menu.js';
-import {createInfoAndPriceTemplate} from './view/info-price.js';
-import {createFiltersTemplate} from './view/filter.js';
+// import {createInfoAndPriceTemplate} from './view/info-price.js';
+import InfoAndPrice from './view/info-price.js';
+//import {createFiltersTemplate} from './view/filter.js';
+import FilterView from './view/filter.js';
 import {createSortingTemplate} from './view/sorting.js';
-import {createEventsList} from './view/events-list.js';
-import {createEditFormTemplate} from './view/edit-form.js';
+//import {createEventsList} from './view/events-list.js';
+import EventsListView from './view/events-list.js';
+//import {createEditFormTemplate} from './view/edit-form.js';
+import EditFormView from './view/edit-form.js';
 import {createTripPointTemplate} from './view/trip-point.js';
 //import {createAddFormTemplate} from './view/add-form.js';
 import AddFormView from './view/add-form.js';
@@ -67,16 +71,20 @@ const tripEventsElement = siteMainElement.querySelector('.trip-events');
 // отрисовки
 //renderTemplate(menuElement, createSiteMenuTemplate(), 'beforeend');
 renderElement(menuElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-renderTemplate(tripElement, createInfoAndPriceTemplate(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), 'afterbegin');
-renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
+// renderTemplate(tripElement, createInfoAndPriceTemplate(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), 'afterbegin');
+renderElement(tripElement, new InfoAndPrice().getElement(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), RenderPosition.AFTERBEGIN);
+// renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
+renderElement(filtersElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
 renderTemplate(tripEventsElement, createSortingTemplate(), 'beforeend');
-renderTemplate(tripEventsElement, createEventsList(), 'beforeend');
+//renderTemplate(tripEventsElement, createEventsList(), 'beforeend');
+renderElement(tripEventsElement, new EventsListView().getElement(), RenderPosition.BEFOREEND);
 
 // контейнеры отрисованные в коде выше
 const tripEventsList = tripEventsElement.querySelector('.trip-events__list');
-console.log(tripEventsList);
+
 // отрисовки внутри срендерЁнных контейнеров
-renderTemplate(tripEventsList, createEditFormTemplate(tripPoints[0]), 'afterbegin'); // отрисовка формы редактирования точки
+//renderTemplate(tripEventsList, createEditFormTemplate(tripPoints[0]), 'afterbegin'); // отрисовка формы редактирования точки
+renderElement(tripEventsList, new EditFormView().getElement(tripPoints[0]), RenderPosition.AFTERBEGIN);
 //renderTemplate(tripEventsList, createAddFormTemplate(), 'beforeend'); // отрисовка формы создания точки
 renderElement(tripEventsList, new AddFormView().getElement(), RenderPosition.BEFOREEND);
 
