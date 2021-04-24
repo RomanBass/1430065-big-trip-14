@@ -6,7 +6,8 @@ import {createSortingTemplate} from './view/sorting.js';
 import {createEventsList} from './view/events-list.js';
 import {createEditFormTemplate} from './view/edit-form.js';
 import {createTripPointTemplate} from './view/trip-point.js';
-import {createAddFormTemplate} from './view/add-form.js';
+//import {createAddFormTemplate} from './view/add-form.js';
+import AddFormView from './view/add-form.js';
 //import {createSelectedOptionTemplate} from './view/selected-option.js';
 import {createOptionTemplate} from './view/option.js';
 import {generateTripPoint} from './mock/trip-point.js';
@@ -73,10 +74,11 @@ renderTemplate(tripEventsElement, createEventsList(), 'beforeend');
 
 // контейнеры отрисованные в коде выше
 const tripEventsList = tripEventsElement.querySelector('.trip-events__list');
-
+console.log(tripEventsList);
 // отрисовки внутри срендерЁнных контейнеров
 renderTemplate(tripEventsList, createEditFormTemplate(tripPoints[0]), 'afterbegin'); // отрисовка формы редактирования точки
-renderTemplate(tripEventsList, createAddFormTemplate(), 'beforeend'); // отрисовка формы создания точки
+//renderTemplate(tripEventsList, createAddFormTemplate(), 'beforeend'); // отрисовка формы создания точки
+renderElement(tripEventsList, new AddFormView().getElement(), RenderPosition.BEFOREEND);
 
 for (let i = 1; i < TRIP_POINT_COUNT; i++) { // отрисовка точек маршрута
   renderTemplate(tripEventsList, createTripPointTemplate(tripPoints[i]), 'beforeend');
