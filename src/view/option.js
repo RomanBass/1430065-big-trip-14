@@ -14,17 +14,18 @@ const createOptionTemplate = (tripPoint) => {
 };
 
 export default class Option {
-  constuctor() {
+  constructor(tripPoint) {
+    this._tripPoint = tripPoint;
     this._element = null;
   }
 
-  getTemplate(tripPoint) {
-    return createOptionTemplate(tripPoint);
+  getTemplate() {
+    return createOptionTemplate(this._tripPoint);
   }
 
-  getElement(tripPoint) {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(tripPoint));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

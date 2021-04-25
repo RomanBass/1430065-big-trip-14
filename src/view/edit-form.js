@@ -167,17 +167,18 @@ const createEditFormTemplate = (tripPoint) => {
 };
 
 export default class EditForm {
-  constuctor() {
+  constructor(tripPoint) {
+    this._tripPoint = tripPoint;
     this._element = null;
   }
 
-  getTemplate(tripPoint) {
-    return createEditFormTemplate(tripPoint);
+  getTemplate() {
+    return createEditFormTemplate(this._tripPoint);
   }
 
-  getElement(tripPoint) {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(tripPoint));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

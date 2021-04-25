@@ -46,7 +46,7 @@ const createTripPointTemplate = (tripPoint) => {
 };
 
 export default class TripPoint {
-  constuctor(tripPoint) {
+  constructor(tripPoint) {
     this._tripPoint = tripPoint;
     this._element = null;
   }

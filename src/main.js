@@ -3,10 +3,10 @@ import InfoAndPriceView from './view/info-price.js';
 import FilterView from './view/filter.js';
 import SortingView from './view/sorting.js';
 import EventsListView from './view/events-list.js';
-//import EditFormView from './view/edit-form.js';
+import EditFormView from './view/edit-form.js';
 import TripPointView from './view/trip-point.js';
-//import AddFormView from './view/add-form.js';
-//import OptionView from './view/option.js';
+import AddFormView from './view/add-form.js';
+import OptionView from './view/option.js';
 import {generateTripPoint} from './mock/trip-point.js';
 import {renderElement, RenderPosition, getRoutePrice, getRouteDates, getRouteName} from './utils.js';
 
@@ -30,7 +30,7 @@ const tripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // отрисовки
 renderElement(menuElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-renderElement(tripElement, new InfoAndPriceView().getElement(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), RenderPosition.AFTERBEGIN);
+renderElement(tripElement, new InfoAndPriceView(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)).getElement(), RenderPosition.AFTERBEGIN);
 renderElement(filtersElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
 renderElement(tripEventsElement, new SortingView().getElement(), RenderPosition.BEFOREEND);
 renderElement(tripEventsElement, new EventsListView().getElement(), RenderPosition.BEFOREEND);
@@ -39,8 +39,8 @@ renderElement(tripEventsElement, new EventsListView().getElement(), RenderPositi
 const tripEventsList = tripEventsElement.querySelector('.trip-events__list');
 
 // отрисовки внутри срендерЁнных контейнеров
-// renderElement(tripEventsList, new EditFormView().getElement(tripPoints[0]), RenderPosition.AFTERBEGIN); // отрисовка формы редактирования точки
-// renderElement(tripEventsList, new AddFormView().getElement(), RenderPosition.BEFOREEND); // отрисовка формы создания точки
+renderElement(tripEventsList, new EditFormView(tripPoints[0]).getElement(), RenderPosition.AFTERBEGIN); // отрисовка формы редактирования точки
+renderElement(tripEventsList, new AddFormView().getElement(), RenderPosition.BEFOREEND); // отрисовка формы создания точки
 
 for (let i = 1; i < TRIP_POINT_COUNT; i++) { // отрисовка точек маршрута
   renderElement(tripEventsList, new TripPointView(tripPoints[i]).getElement(), RenderPosition.BEFOREEND);
@@ -50,8 +50,8 @@ for (let i = 1; i < TRIP_POINT_COUNT; i++) { // отрисовка точек м
 }
 
 //отрисовка опций в форме редактирования
-// const optionsBlockInEditForm = tripEventsElement.querySelector('.event__available-offers');
-// optionsBlockInEditForm.innerHTML = '';
-// for (let i = 0; i < tripPoints[0].offers.length; i++) {
-//   renderElement(optionsBlockInEditForm, new OptionView().getElement(tripPoints[0].offers[i]), RenderPosition.BEFOREEND);
-// }
+const optionsBlockInEditForm = tripEventsElement.querySelector('.event__available-offers');
+optionsBlockInEditForm.innerHTML = '';
+for (let i = 0; i < tripPoints[0].offers.length; i++) {
+  renderElement(optionsBlockInEditForm, new OptionView(tripPoints[0].offers[i]).getElement(), RenderPosition.BEFOREEND);
+}

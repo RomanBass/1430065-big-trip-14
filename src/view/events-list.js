@@ -5,7 +5,7 @@ const createEventsListTemplate = () => {
 };
 
 export default class EventsList {
-  constuctor() {
+  constructor() {
     this._element = null;
   }
 

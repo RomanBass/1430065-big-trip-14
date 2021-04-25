@@ -13,17 +13,20 @@ const createInfoAndPriceTemplate = (price, date, name) => {
 };
 
 export default class InfoAndPrice {
-  constuctor() {
+  constructor(price, date, name) {
+    this._price = price;
+    this._date = date;
+    this._name = name;
     this._element = null;
   }
 
-  getTemplate(price, date, name) {
-    return createInfoAndPriceTemplate(price, date, name);
+  getTemplate() {
+    return createInfoAndPriceTemplate(this._price, this._date, this._name);
   }
 
-  getElement(price, date, name) {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(price, date, name));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
