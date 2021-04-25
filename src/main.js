@@ -39,19 +39,19 @@ renderElement(tripEventsElement, new EventsListView().getElement(), RenderPositi
 const tripEventsList = tripEventsElement.querySelector('.trip-events__list');
 
 // отрисовки внутри срендерЁнных контейнеров
-renderElement(tripEventsList, new EditFormView().getElement(tripPoints[0]), RenderPosition.AFTERBEGIN); // отрисовка формы редактирования точки
-renderElement(tripEventsList, new AddFormView().getElement(), RenderPosition.BEFOREEND); // отрисовка формы создания точки
+// renderElement(tripEventsList, new EditFormView().getElement(tripPoints[0]), RenderPosition.AFTERBEGIN); // отрисовка формы редактирования точки
+// renderElement(tripEventsList, new AddFormView().getElement(), RenderPosition.BEFOREEND); // отрисовка формы создания точки
 
 for (let i = 1; i < TRIP_POINT_COUNT; i++) { // отрисовка точек маршрута
-  renderElement(tripEventsList, new TripPointView().getElement(tripPoints[i]), RenderPosition.BEFOREEND);
+  renderElement(tripEventsList, new TripPointView(tripPoints[i]).getElement(), RenderPosition.BEFOREEND);
   //const optionsElement = tripEventsList.querySelector('.trip-events__item:last-child .event__selected-offers');
   //render(optionsElement, createOptionTemplate(), 'beforeend'); // отрисовка опций
   //console.log(optionsElement);
 }
 
 //отрисовка опций в форме редактирования
-const optionsBlockInEditForm = tripEventsElement.querySelector('.event__available-offers');
-optionsBlockInEditForm.innerHTML = '';
-for (let i = 0; i < tripPoints[0].offers.length; i++) {
-  renderElement(optionsBlockInEditForm, new OptionView().getElement(tripPoints[0].offers[i]), RenderPosition.BEFOREEND);
-}
+// const optionsBlockInEditForm = tripEventsElement.querySelector('.event__available-offers');
+// optionsBlockInEditForm.innerHTML = '';
+// for (let i = 0; i < tripPoints[0].offers.length; i++) {
+//   renderElement(optionsBlockInEditForm, new OptionView().getElement(tripPoints[0].offers[i]), RenderPosition.BEFOREEND);
+// }
