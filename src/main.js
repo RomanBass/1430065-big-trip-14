@@ -3,10 +3,10 @@ import InfoAndPriceView from './view/info-price.js';
 import FilterView from './view/filter.js';
 import SortingView from './view/sorting.js';
 import EventsListView from './view/events-list.js';
-import EditFormView from './view/edit-form.js';
+//import EditFormView from './view/edit-form.js';
 import TripPointView from './view/trip-point.js';
-import AddFormView from './view/add-form.js';
-import OptionView from './view/option.js';
+//import AddFormView from './view/add-form.js';
+//import OptionView from './view/option.js';
 import {generateTripPoint} from './mock/trip-point.js';
 import {renderElement, RenderPosition, getRoutePrice, getRouteDates, getRouteName} from './utils.js';
 
