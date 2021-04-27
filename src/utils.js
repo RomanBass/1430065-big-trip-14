@@ -25,16 +25,12 @@ export const getDuration = (startDate, finishDate) => { // преобразов�
   return duration;
 };
 
-// export const renderTemplate = (container, template, place) => { // отрисовывает элементы в контейнеры с учётом расположения
-//   container.insertAdjacentHTML(place, template);
-// };
-
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
 };
 
-export const renderElement = (container, element, place) => {
+export const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
