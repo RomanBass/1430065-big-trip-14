@@ -1,4 +1,6 @@
-export const createEditFormTemplate = (tripPoint) => {
+import {createElement} from '../utils.js';
+
+const createEditFormTemplate = (tripPoint) => {
   const {destination, basePrice, type, dateFrom, dateTo} = tripPoint;
   const {description, name} = destination;
 
@@ -163,3 +165,26 @@ export const createEditFormTemplate = (tripPoint) => {
   </form>
 </li>`;
 };
+
+export default class EditForm {
+  constructor(tripPoint) {
+    this._tripPoint = tripPoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditFormTemplate(this._tripPoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

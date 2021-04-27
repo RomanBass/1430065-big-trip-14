@@ -1,7 +1,8 @@
-import {getDuration} from '../mock/trip-point.js';
+import {createElement} from '../utils.js';
+import {getDuration} from '../utils.js';
 import {makeFavorite} from '../mock/trip-point.js';
 
-export const createTripPointTemplate = (tripPoint) => {
+const createTripPointTemplate = (tripPoint) => {
   const {basePrice, dateFrom, dateTo, type, destination, isFavorite} = tripPoint;
   const {name} = destination;
 
@@ -43,3 +44,26 @@ export const createTripPointTemplate = (tripPoint) => {
   </div>
 </li>`;
 };
+
+export default class TripPoint {
+  constructor(tripPoint) {
+    this._tripPoint = tripPoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripPointTemplate(this._tripPoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
