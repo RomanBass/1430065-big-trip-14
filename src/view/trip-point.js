@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 import {getDuration} from '../utils.js';
 import {makeFavorite} from '../mock/trip-point.js';
 
@@ -45,25 +45,13 @@ const createTripPointTemplate = (tripPoint) => {
 </li>`;
 };
 
-export default class TripPoint {
+export default class TripPoint extends AbstractView {
   constructor(tripPoint) {
+    super();
     this._tripPoint = tripPoint;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripPointTemplate(this._tripPoint);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
