@@ -57,16 +57,15 @@ const renderTripPoint = (tripPointsListElement, tripPoint) => { // отрисо�
     tripPointsListElement.replaceChild(tripPointComponent.getElement(), tripEditComponent.getElement());
   };
 
-  tripPointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
+  tripPointComponent.setRollupButtonClickHandler(() => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
     replacePointToEditor();
   });
 
-  tripEditComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
+  tripEditComponent.setRollupButtonClickHandler(() => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
     replaceEditorToPoint();
   });
 
-  tripEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
-    evt.preventDefault();
+  tripEditComponent.setSubmitButtonClickHandler(() => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
     replaceEditorToPoint();
   });
 
@@ -77,14 +76,3 @@ const renderTripPoint = (tripPointsListElement, tripPoint) => { // отрисо�
 tripPoints.forEach((element) => {
   renderTripPoint(tripEventsListElement.getElement(), element);
 });
-
-
-// for (let j = 0; j < tripPoint.offers.length; j++) {
-//   render(optionsBlockInEditForm, new OptionView(tripPoint.offers[j]).getElement(), RenderPosition.BEFOREEND);
-// }
-
-// for (let i = 0; i < TRIP_POINT_COUNT; i++) {
-//   renderTripPoint(tripEventsListElement.getElement(), tripPoints[i]);
-// }
-
-//const optionsElement = tripEventsListElement.querySelector('.trip-events__item:last-child .event__selected-offers');
