@@ -1,4 +1,3 @@
-//import {createElement} from '../utils.js';
 import AbstractView from './abstract.js';
 
 const createAddFormTemplate = () => {

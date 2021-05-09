@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import {getDuration} from '../utils.js';
+import {getDuration} from '../utils/common.js';
 import {makeFavorite} from '../mock/trip-point.js';
 
 const createTripPointTemplate = (tripPoint) => {
