@@ -1,5 +1,5 @@
-import {createElement} from '../utils.js';
-import {getDuration} from '../utils.js';
+import AbstractView from './abstract.js';
+import {getDuration} from '../utils/common.js';
 import {makeFavorite} from '../mock/trip-point.js';
 
 const createTripPointTemplate = (tripPoint) => {
@@ -45,25 +45,25 @@ const createTripPointTemplate = (tripPoint) => {
 </li>`;
 };
 
-export default class TripPoint {
+export default class TripPoint extends AbstractView {
   constructor(tripPoint) {
+    super();
     this._tripPoint = tripPoint;
-    this._element = null;
+
+    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
   }
 
   getTemplate() {
     return createTripPointTemplate(this._tripPoint);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _rollupButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.rollupButtonClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setRollupButtonClickHandler(callback) {
+    this._callback.rollupButtonClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
   }
 }

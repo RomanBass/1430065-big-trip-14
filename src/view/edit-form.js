@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
 const createEditFormTemplate = (tripPoint) => {
   const {destination, basePrice, type, dateFrom, dateTo} = tripPoint;
@@ -166,25 +166,36 @@ const createEditFormTemplate = (tripPoint) => {
 </li>`;
 };
 
-export default class EditForm {
+export default class EditForm extends AbstractView {
   constructor(tripPoint) {
+    super();
     this._tripPoint = tripPoint;
-    this._element = null;
+
+    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
+    this._submitButtonClickHandler = this._submitButtonClickHandler.bind(this);
   }
 
   getTemplate() {
     return createEditFormTemplate(this._tripPoint);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _rollupButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.rollupButtonClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setRollupButtonClickHandler(callback) {
+    this._callback.rollupButtonClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+  }
+
+  _submitButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.submitButtonClick();
+  }
+
+  setSubmitButtonClickHandler(callback) {
+    this._callback.submitButtonClick = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._submitButtonClickHandler);
   }
 }

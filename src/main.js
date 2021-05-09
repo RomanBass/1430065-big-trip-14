@@ -8,7 +8,8 @@ import TripPointView from './view/trip-point.js';
 import AddFormView from './view/add-form.js';
 import OptionView from './view/option.js';
 import {generateTripPoint} from './mock/trip-point.js';
-import {render, RenderPosition, getRoutePrice, getRouteDates, getRouteName} from './utils.js';
+import {render, RenderPosition, replace} from './utils/render.js';
+import {getRoutePrice, getRouteDates, getRouteName} from './utils/route.js';
 
 const TRIP_POINT_COUNT = 15;
 const tripPoints = new Array(TRIP_POINT_COUNT).fill().map(generateTripPoint); // массив точек маршрута
@@ -42,7 +43,7 @@ const renderTripPoint = (tripPointsListElement, tripPoint) => { // отрисо�
   const tripEditComponent = new EditFormView(tripPoint);
 
   const replacePointToEditor = () => { // заменяет элемент точки маршрута на форму редактирования
-    tripPointsListElement.replaceChild(tripEditComponent.getElement(), tripPointComponent.getElement());
+    replace(tripEditComponent, tripPointComponent);
     // вставляет опции в форму редактирования...
     const optionsBlockInEditForm = tripEditComponent.getElement().querySelector('.event__available-offers');
     optionsBlockInEditForm.innerHTML = '';
@@ -54,19 +55,18 @@ const renderTripPoint = (tripPointsListElement, tripPoint) => { // отрисо�
   };
 
   const replaceEditorToPoint = () => { // заменяет элемент формы редактирования на точку маршрута
-    tripPointsListElement.replaceChild(tripPointComponent.getElement(), tripEditComponent.getElement());
+    replace(tripPointComponent, tripEditComponent);
   };
 
-  tripPointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
+  tripPointComponent.setRollupButtonClickHandler(() => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
     replacePointToEditor();
   });
 
-  tripEditComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
+  tripEditComponent.setRollupButtonClickHandler(() => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
     replaceEditorToPoint();
   });
 
-  tripEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
-    evt.preventDefault();
+  tripEditComponent.setSubmitButtonClickHandler(() => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
     replaceEditorToPoint();
   });
 
@@ -77,14 +77,3 @@ const renderTripPoint = (tripPointsListElement, tripPoint) => { // отрисо�
 tripPoints.forEach((element) => {
   renderTripPoint(tripEventsListElement.getElement(), element);
 });
-
-
-// for (let j = 0; j < tripPoint.offers.length; j++) {
-//   render(optionsBlockInEditForm, new OptionView(tripPoint.offers[j]).getElement(), RenderPosition.BEFOREEND);
-// }
-
-// for (let i = 0; i < TRIP_POINT_COUNT; i++) {
-//   renderTripPoint(tripEventsListElement.getElement(), tripPoints[i]);
-// }
-
-//const optionsElement = tripEventsListElement.querySelector('.trip-events__item:last-child .event__selected-offers');
