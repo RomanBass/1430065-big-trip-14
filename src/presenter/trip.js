@@ -38,13 +38,9 @@ export default class Trip {
     this._tripPoints.slice().forEach((point) => this._renderPoint(point));
   }
 
-  _renderPointsList() {
-    this._renderPoints();
-  }
-
   _renderTrip() {
     this._renderSort();
     this._renderAddForm();
-    this._renderPointsList();
+    this._renderPoints();
   }
 }
