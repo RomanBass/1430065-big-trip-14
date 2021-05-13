@@ -1,10 +1,8 @@
 import SortingView from '../view/sorting.js';
 import EventsListView from '../view/events-list.js';
 import EditFormView from '../view/edit-form.js';
-import TripPointView from '../view/trip-point.js';
 import AddFormView from '../view/add-form.js';
-import OptionView from '../view/option.js';
-import {render, RenderPosition, replace} from '../utils/render.js';
+import {render, RenderPosition} from '../utils/render.js';
 import PointPresenter from './point.js';
 
 export default class Trip {
