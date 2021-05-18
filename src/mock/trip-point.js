@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {getRandomInteger} from '../utils/common.js';
 
 const cities = ['London', 'Paris', 'Beijing', 'Tokyo', 'Melbourne'];
@@ -83,7 +84,7 @@ export const generateTripPoint = () => {
       name: cities[getRandomInteger(0, cities.length - 1)],
       pictures: getPictures(),
     },
-    id: '0',
+    id: nanoid(),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     offers: getOffers(),
     type: types[getRandomInteger(0, types.length - 1)],
