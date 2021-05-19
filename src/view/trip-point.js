@@ -50,20 +50,31 @@ export default class TripPoint extends AbstractView {
     super();
     this._tripPoint = tripPoint;
 
-    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
+    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this); // привязка контекста элемента класса
+    this._favoriteButtonClickHandler = this._favoriteButtonClickHandler.bind(this); // привязка контекста элемента класса
   }
 
   getTemplate() {
-    return createTripPointTemplate(this._tripPoint);
+    return createTripPointTemplate(this._tripPoint); // возвращает образец ДОМ-элемента точки
   }
 
-  _rollupButtonClickHandler(evt) {
+  _rollupButtonClickHandler(evt) { // обработчик клика по стрелке
     evt.preventDefault();
     this._callback.rollupButtonClick();
   }
 
-  setRollupButtonClickHandler(callback) {
+  setRollupButtonClickHandler(callback) { // установщик обработчика клика по стрелке
     this._callback.rollupButtonClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+  }
+
+  _favoriteButtonClickHandler(evt) { // обработччик клика по звёздочке
+    evt.preventDefault();
+    this._callback.favoriteButtonClick();
+  }
+
+  setFavoriteButtonClickHandler(callback) { // установщик обработчика клика по стрелке
+    this._callback.favoriteButtonClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteButtonClickHandler);
   }
 }
