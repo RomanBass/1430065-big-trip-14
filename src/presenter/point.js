@@ -2,19 +2,25 @@ import EditFormView from '../view/edit-form.js';
 import TripPointView from '../view/trip-point.js';
 import OptionView from '../view/option.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
-//import {makeFavorite} from '../mock/trip-point.js';
 
-export default class Point {
-  constructor(pointsListContainer, changeData) {
+const Mode = { // флаг режима отображения точки
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+export default class Point { // класс точки
+  constructor(pointsListContainer, changeData, changeMode) {
     this._pointsListContainer = pointsListContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode; //метод изменения режима карточки: дефолт или редактирование
 
     this._pointComponent = null;
     this._editFormComponent = null;
+    this._mode = Mode.DEFAULT;
 
-    this._handlePointToEditClick = this._handlePointToEditClick.bind(this); // привязка контекста
-    this._handleEditToPointClick = this._handleEditToPointClick.bind(this); // привязка контекста
-    this._handleFavoriteButtonClick = this._handleFavoriteButtonClick.bind(this); // привязка контекста
+    this._handlePointToEditClick = this._handlePointToEditClick.bind(this); // привязка контекста к this
+    this._handleEditToPointClick = this._handleEditToPointClick.bind(this); // привязка контекста к this
+    this._handleFavoriteButtonClick = this._handleFavoriteButtonClick.bind(this); // привязка контекста к this
   }
 
   init(point) {
@@ -36,11 +42,11 @@ export default class Point {
       return;
     }
 
-    if (this._pointsListContainer.getElement().contains(prevPointComponent.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._pointComponent, prevPointComponent);
     }
 
-    if (this._pointsListContainer.getElement().contains(prevEditFormComponent.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._editFormComponent, prevEditFormComponent);
     }
 
@@ -53,6 +59,12 @@ export default class Point {
     remove(this._editFormComponent);
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditorToPoint();
+    }
+  }
+
   _replacePointToEditor() { // заменяет элемент точки маршрута на форму редактирования
     replace(this._editFormComponent, this._pointComponent);
     // вставляет опции в форму редактирования...
@@ -61,10 +73,13 @@ export default class Point {
     this._point.offers.forEach((element) => {
       render(optionsBlockInEditForm, new OptionView(element).getElement(), RenderPosition.BEFOREEND);
     });
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _replaceEditorToPoint() { // заменяет элемент формы редактирования на точку маршрута
     replace(this._pointComponent, this._editFormComponent);
+    this._mode = Mode.DEFAULT;
   }
 
   _handlePointToEditClick() {
@@ -83,7 +98,5 @@ export default class Point {
         {isFavorite: !this._point.isFavorite},
       ),
     );
-
-    //console.log(makeFavorite(!this._point.isFavorite));
   }
 }
