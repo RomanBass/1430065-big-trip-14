@@ -65,7 +65,7 @@ export default class Trip {
   }
 
   _renderTrip() { // отрисовка маршрута
-    this._renderAddForm();
+  // this._renderAddForm();
     this._renderPoints();
   }
 
