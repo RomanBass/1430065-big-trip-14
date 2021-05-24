@@ -30,3 +30,5 @@ render(filtersElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter(tripEventsElement);
 tripPresenter.init(tripPoints);
+
+export {tripPoints};

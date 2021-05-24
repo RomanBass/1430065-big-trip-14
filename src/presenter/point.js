@@ -1,7 +1,8 @@
 import EditFormView from '../view/edit-form.js';
 import TripPointView from '../view/trip-point.js';
 import OptionView from '../view/option.js';
-import {render, RenderPosition, replace, remove} from '../utils/render.js';
+import {render, RenderPosition, replace, remove, createElement, getCitiesUniqueNames} from '../utils/render.js';
+import {tripPoints} from '../main.js';
 
 const Mode = { // флаг режима отображения точки
   DEFAULT: 'DEFAULT',
@@ -67,12 +68,37 @@ export default class Point { // класс точки
 
   _replacePointToEditor() { // заменяет элемент точки маршрута на форму редактирования
     replace(this._editFormComponent, this._pointComponent);
-    // вставляет опции в форму редактирования...
+
+    // код для генерации элементов datalist...
+    const dataList = this._editFormComponent.getElement().querySelector('datalist');
+    const citiesNames = getCitiesUniqueNames(tripPoints);
+    if (!dataList.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
+      citiesNames.forEach((cityName) => {
+        render(dataList, createElement(`<option value="${cityName}"></option>`), RenderPosition.BEFOREEND);
+      });
+    }
+
+    // код для генерации опций...
     const optionsBlockInEditForm = this._editFormComponent.getElement().querySelector('.event__available-offers');
-    optionsBlockInEditForm.innerHTML = '';
-    this._point.offers.forEach((element) => {
-      render(optionsBlockInEditForm, new OptionView(element).getElement(), RenderPosition.BEFOREEND);
-    });
+    if (!optionsBlockInEditForm.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
+      this._point.offers.forEach((element) => {
+        render(optionsBlockInEditForm, new OptionView(element).getElement(), RenderPosition.BEFOREEND);
+      });
+    }
+
+    // код для генерации картинок...
+    const picturesContainer = this._editFormComponent.getElement().querySelector('.event__photos-tape');
+
+    if (this._point.destination.pictures.length == 0) { // чтобы убрать горизонтальный скролл, если у точки нет фотографий
+      picturesContainer.parentNode.classList.add('visually-hidden');
+    }
+
+    if (!picturesContainer.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
+      this._point.destination.pictures.forEach((element) => {
+        render(picturesContainer, createElement(`<img class="event__photo" src="${element.src}" alt="${element.description}">`), RenderPosition.BEFOREEND);
+      });
+    }
+
     this._changeMode();
     this._mode = Mode.EDITING;
   }

@@ -57,3 +57,17 @@ export const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
 };
+
+export const getCitiesUniqueNames = (tripPoints) => { // выдаёт отсортированный массив уникальных названий городов из массива точек маршрута
+  const citiesNames = [];
+
+  const removeDuplicates = (array) => {
+    return array.filter((value, index) => array.indexOf(value) === index);
+  };
+
+  tripPoints.forEach((point) => {
+    citiesNames.push(point.destination.name);
+  });
+
+  return removeDuplicates(citiesNames).sort();
+};
