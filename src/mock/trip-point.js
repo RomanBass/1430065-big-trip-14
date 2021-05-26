@@ -19,15 +19,15 @@ const OfferTitles = {
   restaurant: ['Restaurant-Option-1', 'Restaurant-Option-2', 'Restaurant-Option-3', 'Restaurant-Option-4', 'Restaurant-Option-5'],
 };
 
-const getPossibleOffers = (Titles) => { // формирует массив объектов возможных опций на основе объекта заголовков опций и массива типов точек
-  Titles = JSON.parse(JSON.stringify(Titles));
-  for (const key in Titles) {
-    Titles[key].forEach((element) => {
-      Titles[key][Titles[key].indexOf(element)] = {title: Titles[key][Titles[key].indexOf(element)], price: getRandomInteger(50, 100)};
+const getPossibleOffers = (Titles) => { // формирует объект возможных опций из объекта заголовков типа OfferTitles
+  const Offers = JSON.parse(JSON.stringify(Titles));
+  for (const key in Offers) {
+    Offers[key].forEach((element) => {
+      Offers[key][Offers[key].indexOf(element)] = {title: Offers[key][Offers[key].indexOf(element)], price: getRandomInteger(50, 100)};
     });
   }
 
-  return Titles;
+  return Offers;
 };
 
 export const possibleOffers = (getPossibleOffers(OfferTitles));

@@ -71,17 +71,17 @@ export default class Point { // класс точки
     replace(this._editFormComponent, this._pointComponent);
 
     // код для генерации элементов datalist...
-    const dataList = this._editFormComponent.getElement().querySelector('datalist');
+    const dataList = this._editFormComponent.getDataListBlock();
     const citiesNames = getCitiesUniqueNames(tripPoints);
-    if (!dataList.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
+    if (this._editFormComponent.isDataListBlockEmpty()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
       citiesNames.forEach((cityName) => {
         render(dataList, createElement(`<option value="${cityName}"></option>`), RenderPosition.BEFOREEND);
       });
     }
 
     // код для генерации опций...
-    const optionsBlock = this._editFormComponent.getElement().querySelector('.event__available-offers');
-    if (!optionsBlock.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
+    const optionsBlock = this._editFormComponent.getOptionsBlock();
+    if (this._editFormComponent.isOptionsBlockEmpty()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
       possibleOffers[this._point.type].forEach((element) => { // отрисовка всех доступных опций
 
         let isChecked = ''; // добавление атрибута чекет выбранным опциям...
@@ -93,23 +93,25 @@ export default class Point { // класс точки
 
         render(optionsBlock, new OptionView(element, isChecked).getElement(), RenderPosition.BEFOREEND);
       });
+
     }  // ...код для генерации опций
 
     // код для генерации картинок...
-    const picturesContainer = this._editFormComponent.getElement().querySelector('.event__photos-tape');
+    const picturesContainer = this._editFormComponent.getPhotosBlock();
 
     if (this._point.destination.pictures.length == 0) { // убирает горизонтальный скролл, если у точки нет фотографий
       picturesContainer.parentNode.classList.add('visually-hidden');
     }
 
-    if (!picturesContainer.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
+    if (this._editFormComponent.isPhotosBlockEmpty()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
       this._point.destination.pictures.forEach((element) => {
         render(picturesContainer, createElement(`<img class="event__photo" src="${element.src}" alt="${element.description}">`), RenderPosition.BEFOREEND);
       });
-    }
+    }  // ...код для генерации картинок
 
     this._changeMode();
     this._mode = Mode.EDITING;
+    console.log(dataList);
   }
 
   _replaceEditorToPoint() { // заменяет элемент формы редактирования на точку маршрута

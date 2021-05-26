@@ -151,4 +151,31 @@ export default class EditForm extends AbstractView {
     this.getElement().querySelector('form').addEventListener('submit', this._submitButtonClickHandler);
   }
 
+  getOptionsBlock() {
+    return this.getElement().querySelector('.event__available-offers');
+  }
+
+  isOptionsBlockEmpty() {
+    const optionsBlock = this.getElement().querySelector('.event__available-offers');
+    return !optionsBlock.hasChildNodes();
+  }
+
+  getPhotosBlock() {
+    return this.getElement().querySelector('.event__photos-tape');
+  }
+
+  isPhotosBlockEmpty() {
+    const photosBlock = this.getElement().querySelector('.event__photos-tape');
+    return !photosBlock.hasChildNodes();
+  }
+
+  getDataListBlock() {
+    return this.getElement().querySelector('datalist');
+  }
+
+  isDataListBlockEmpty() {
+    const dataListBlock = this.getElement().querySelector('datalist');
+    return !dataListBlock.hasChildNodes();
+  }
+
 }
