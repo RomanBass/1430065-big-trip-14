@@ -81,24 +81,24 @@ export default class Point { // класс точки
 
     // код для генерации опций...
     const optionsBlock = this._editFormComponent.getElement().querySelector('.event__available-offers');
-
     if (!optionsBlock.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
       possibleOffers[this._point.type].forEach((element) => { // отрисовка всех доступных опций
-        render(optionsBlock, new OptionView(element).getElement(), RenderPosition.BEFOREEND);
 
-        this._point.offers.forEach((offer) => { // добавление атрибута чекет выбранным опциям
+        let isChecked = ''; // добавление атрибута чекет выбранным опциям...
+        this._point.offers.forEach((offer) => {
           if (element.title === offer.title) {
-            const optionInput = this._editFormComponent.getElement().querySelector('.event__offer-selector:last-child .event__offer-checkbox');
-            optionInput.checked = true;
+            isChecked = 'checked';
           }
-        });
+        });  // ...добавление атрибута чекет выбранным опциям
+
+        render(optionsBlock, new OptionView(element, isChecked).getElement(), RenderPosition.BEFOREEND);
       });
-    }
+    }  // ...код для генерации опций
 
     // код для генерации картинок...
     const picturesContainer = this._editFormComponent.getElement().querySelector('.event__photos-tape');
 
-    if (this._point.destination.pictures.length == 0) { // чтобы убрать горизонтальный скролл, если у точки нет фотографий
+    if (this._point.destination.pictures.length == 0) { // убирает горизонтальный скролл, если у точки нет фотографий
       picturesContainer.parentNode.classList.add('visually-hidden');
     }
 

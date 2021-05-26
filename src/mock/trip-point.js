@@ -31,7 +31,6 @@ const getPossibleOffers = (Titles) => { // формирует массив об�
 };
 
 export const possibleOffers = (getPossibleOffers(OfferTitles));
-console.log(possibleOffers);
 
 const descriptionSentences = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
