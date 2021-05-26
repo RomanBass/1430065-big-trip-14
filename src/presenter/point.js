@@ -3,6 +3,7 @@ import TripPointView from '../view/trip-point.js';
 import OptionView from '../view/option.js';
 import {render, RenderPosition, replace, remove, createElement, getCitiesUniqueNames} from '../utils/render.js';
 import {tripPoints} from '../main.js';
+import {possibleOffers} from '../mock/trip-point.js';
 
 const Mode = { // флаг режима отображения точки
   DEFAULT: 'DEFAULT',
@@ -79,10 +80,18 @@ export default class Point { // класс точки
     }
 
     // код для генерации опций...
-    const optionsBlockInEditForm = this._editFormComponent.getElement().querySelector('.event__available-offers');
-    if (!optionsBlockInEditForm.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
-      this._point.offers.forEach((element) => {
-        render(optionsBlockInEditForm, new OptionView(element).getElement(), RenderPosition.BEFOREEND);
+    const optionsBlock = this._editFormComponent.getElement().querySelector('.event__available-offers');
+
+    if (!optionsBlock.hasChildNodes()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
+      possibleOffers[this._point.type].forEach((element) => { // отрисовка всех доступных опций
+        render(optionsBlock, new OptionView(element).getElement(), RenderPosition.BEFOREEND);
+
+        this._point.offers.forEach((offer) => { // добавление атрибута чекет выбранным опциям
+          if (element.title === offer.title) {
+            const optionInput = this._editFormComponent.getElement().querySelector('.event__offer-selector:last-child .event__offer-checkbox');
+            optionInput.checked = true;
+          }
+        });
       });
     }
 

@@ -19,6 +19,20 @@ const OfferTitles = {
   restaurant: ['Restaurant-Option-1', 'Restaurant-Option-2', 'Restaurant-Option-3', 'Restaurant-Option-4', 'Restaurant-Option-5'],
 };
 
+const getPossibleOffers = (Titles) => { // формирует массив объектов возможных опций на основе объекта заголовков опций и массива типов точек
+  Titles = JSON.parse(JSON.stringify(Titles));
+  for (const key in Titles) {
+    Titles[key].forEach((element) => {
+      Titles[key][Titles[key].indexOf(element)] = {title: Titles[key][Titles[key].indexOf(element)], price: getRandomInteger(50, 100)};
+    });
+  }
+
+  return Titles;
+};
+
+export const possibleOffers = (getPossibleOffers(OfferTitles));
+console.log(possibleOffers);
+
 const descriptionSentences = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
@@ -56,7 +70,7 @@ const getOffers = (type) => { // создание массива объекто�
     const titleValue = titles[getRandomInteger(0, titles.length - 1)];
     const offer = {
       title: titleValue,
-      price: getRandomInteger(50, 200),
+      price: getRandomInteger(50, 100),
     };
     offers.push(offer);
     titles = titles.filter((element) => {
@@ -107,3 +121,25 @@ export const generateTripPoint = () => {
     type: TYPE,
   };
 };
+
+
+// const getPossibleOffers = (Titles, types) => { // формирует массив объектов возможных опций на основе объекта заголовков опций и массива типов точек
+//   Titles = JSON.parse(JSON.stringify(Titles));
+//   for (const key in Titles) {
+//     Titles[key].forEach((element) => {
+//       Titles[key][Titles[key].indexOf(element)] = {title: Titles[key][Titles[key].indexOf(element)], price: getRandomInteger(50, 100)};
+//     });
+//   }
+
+//   const possibleOffers = [];
+//   let offer = {};
+
+//   types.forEach((element) => {
+//     offer = JSON.parse(JSON.stringify(offer));
+//     offer['type'] = element;
+//     offer['offers'] = Titles[element];
+//     possibleOffers.push(offer);
+//   });
+
+//   return possibleOffers;
+// };

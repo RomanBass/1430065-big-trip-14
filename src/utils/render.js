@@ -59,15 +59,11 @@ export const remove = (component) => {
 };
 
 export const getCitiesUniqueNames = (tripPoints) => { // выдаёт отсортированный массив уникальных названий городов из массива точек маршрута
-  const citiesNames = [];
+  const citiesNames = new Set();
 
-  const removeDuplicates = (array) => {
-    return array.filter((value, index) => array.indexOf(value) === index);
-  };
-
-  tripPoints.forEach((point) => {
-    citiesNames.push(point.destination.name);
+  tripPoints.sort().forEach((point) => {
+    citiesNames.add(point.destination.name);
   });
 
-  return removeDuplicates(citiesNames).sort();
+  return citiesNames;
 };
