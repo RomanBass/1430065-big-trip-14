@@ -111,7 +111,6 @@ export default class Point { // класс точки
 
     this._changeMode();
     this._mode = Mode.EDITING;
-    console.log(dataList);
   }
 
   _replaceEditorToPoint() { // заменяет элемент формы редактирования на точку маршрута
