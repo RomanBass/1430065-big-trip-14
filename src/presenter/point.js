@@ -35,8 +35,6 @@ export default class Point { // класс точки
     this._editFormComponent = new EditFormView(point);
 
     this._pointComponent.setRollupButtonClickHandler(this._handlePointToEditClick);
-    this._editFormComponent.setRollupButtonClickHandler(this._handleEditToPointClick);
-    this._editFormComponent.setSubmitButtonClickHandler(this._handleEditToPointClick);
     this._pointComponent.setFavoriteButtonClickHandler(this._handleFavoriteButtonClick);
 
     if (prevPointComponent === null || prevEditFormComponent === null) {
@@ -70,44 +68,34 @@ export default class Point { // класс точки
   _replacePointToEditor() { // заменяет элемент точки маршрута на форму редактирования
     replace(this._editFormComponent, this._pointComponent);
 
-    // код для генерации элементов datalist...
-    const dataList = this._editFormComponent.getDataListBlock();
+    const dataList = this._editFormComponent.getDataListBlock(); // код для генерации элементов datalist...
     const citiesNames = getCitiesUniqueNames(tripPoints);
-    if (this._editFormComponent.isDataListBlockEmpty()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
-      citiesNames.forEach((cityName) => {
-        render(dataList, createElement(`<option value="${cityName}"></option>`), RenderPosition.BEFOREEND);
-      });
-    }
+    citiesNames.forEach((cityName) => {
+      render(dataList, createElement(`<option value="${cityName}"></option>`), RenderPosition.BEFOREEND);
+    });
 
-    // код для генерации опций...
-    const optionsBlock = this._editFormComponent.getOptionsBlock();
-    if (this._editFormComponent.isOptionsBlockEmpty()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
-      possibleOffers[this._point.type].forEach((element) => { // отрисовка всех доступных опций
+    const optionsBlock = this._editFormComponent.getOptionsBlock(); // код для генерации опций...
+    possibleOffers[this._point.type].forEach((element) => { // отрисовка всех доступных опций
 
-        let isChecked = ''; // добавление атрибута чекет выбранным опциям...
-        this._point.offers.forEach((offer) => {
-          if (element.title === offer.title) {
-            isChecked = 'checked';
-          }
-        });  // ...добавление атрибута чекет выбранным опциям
-
-        render(optionsBlock, new OptionView(element, isChecked).getElement(), RenderPosition.BEFOREEND);
+      let isChecked = ''; // добавление атрибута чекет выбранным опциям...
+      this._point.offers.forEach((offer) => {
+        if (element.title === offer.title) {
+          isChecked = 'checked';
+        }
       });
 
-    }  // ...код для генерации опций
+      render(optionsBlock, new OptionView(element, isChecked).getElement(), RenderPosition.BEFOREEND);
+    });
 
-    // код для генерации картинок...
-    const picturesContainer = this._editFormComponent.getPhotosBlock();
+    const picturesContainer = this._editFormComponent.getPhotosBlock(); // код для генерации картинок...
 
-    if (this._point.destination.pictures.length == 0) { // убирает горизонтальный скролл, если у точки нет фотографий
+    if (this._point.destination.pictures.length == 0) { // убирает горизонтальный скролл, если у точки нет картинок
       picturesContainer.parentNode.classList.add('visually-hidden');
     }
 
-    if (this._editFormComponent.isPhotosBlockEmpty()) { // чтобы не дублировалась отрисовка при повторном переключении на точку и опять на форму редактирования
-      this._point.destination.pictures.forEach((element) => {
-        render(picturesContainer, createElement(`<img class="event__photo" src="${element.src}" alt="${element.description}">`), RenderPosition.BEFOREEND);
-      });
-    }  // ...код для генерации картинок
+    this._point.destination.pictures.forEach((element) => {
+      render(picturesContainer, createElement(`<img class="event__photo" src="${element.src}" alt="${element.description}">`), RenderPosition.BEFOREEND);
+    });  // ...код для генерации картинок
 
     this._changeMode();
     this._mode = Mode.EDITING;
@@ -119,6 +107,9 @@ export default class Point { // класс точки
   }
 
   _handlePointToEditClick() {
+    this._editFormComponent = new EditFormView(this._point); // обновляется форма редактирования, чтобы не дублировались картинки, опции и datalist при неоднократном открытии/закрытии
+    this._editFormComponent.setRollupButtonClickHandler(this._handleEditToPointClick); // добавляется обработчик в новую форму редактирования
+    this._editFormComponent.setSubmitButtonClickHandler(this._handleEditToPointClick); // добавляется обработчик в новую форму редактирования
     this._replacePointToEditor();
   }
 
