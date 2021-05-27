@@ -32,7 +32,7 @@ export default class Point { // класс точки
     const prevEditFormComponent = this._editFormComponent;
 
     this._pointComponent = new TripPointView(point);
-    this._editFormComponent = new EditFormView(point);
+    //this._editFormComponent = new EditFormView(point);
 
     this._pointComponent.setRollupButtonClickHandler(this._handlePointToEditClick);
     this._pointComponent.setFavoriteButtonClickHandler(this._handleFavoriteButtonClick);

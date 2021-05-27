@@ -121,61 +121,67 @@ const createEditFormTemplate = (tripPoint) => {
 export default class EditForm extends AbstractView {
   constructor(tripPoint) {
     super();
-    this._tripPoint = tripPoint;
+    //this._tripPoint = tripPoint;
+    this._data = EditForm.parsePointToData(tripPoint);
 
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
     this._submitButtonClickHandler = this._submitButtonClickHandler.bind(this);
   }
 
-  getTemplate() {
-    return createEditFormTemplate(this._tripPoint);
+  getTemplate() { // создаёт ДОМ элемент формы редактирования
+    // return createEditFormTemplate(this._tripPoint);
+    return createEditFormTemplate(this._data);
   }
 
-  _rollupButtonClickHandler(evt) {
+  _rollupButtonClickHandler(evt) { // ?????
     evt.preventDefault();
     this._callback.rollupButtonClick();
   }
 
-  setRollupButtonClickHandler(callback) {
+  setRollupButtonClickHandler(callback) { // навешивает обработчик на стрелку, вызывающий callback
     this._callback.rollupButtonClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
   }
 
-  _submitButtonClickHandler(evt) {
+  _submitButtonClickHandler(evt) { // ?????
     evt.preventDefault();
     this._callback.submitButtonClick();
   }
 
-  setSubmitButtonClickHandler(callback) {
+  setSubmitButtonClickHandler(callback) { // навешивает обработчик на кнопку Save, вызывающий callback
     this._callback.submitButtonClick = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._submitButtonClickHandler);
   }
 
-  getOptionsBlock() {
+  getOptionsBlock() { // возвращает ДОМ элемент содержащий опции
     return this.getElement().querySelector('.event__available-offers');
   }
 
-  isOptionsBlockEmpty() {
+  isOptionsBlockEmpty() { // проверяет наличие опций в ДОМ элементе
     const optionsBlock = this.getElement().querySelector('.event__available-offers');
     return !optionsBlock.hasChildNodes();
   }
 
-  getPhotosBlock() {
+  getPhotosBlock() {// возвращает ДОМ элемент содержащий фотки
     return this.getElement().querySelector('.event__photos-tape');
   }
 
-  isPhotosBlockEmpty() {
+  isPhotosBlockEmpty() { // проверяет наличие фоток в ДОМ элементе
     const photosBlock = this.getElement().querySelector('.event__photos-tape');
     return !photosBlock.hasChildNodes();
   }
 
-  getDataListBlock() {
+  getDataListBlock() {// возвращает ДОМ элемент содержащий элементы дата-листа
     return this.getElement().querySelector('datalist');
   }
 
-  isDataListBlockEmpty() {
+  isDataListBlockEmpty() { // проверяет наличие дочерних элементов в ДОМ элементе <datalist>
     const dataListBlock = this.getElement().querySelector('datalist');
     return !dataListBlock.hasChildNodes();
+  }
+
+  static parsePointToData(point) {
+    return Object.assign({...point, type: 'taxi', offers: [{title: 'Taxy-Option', price: 111}]});
   }
 
 }
