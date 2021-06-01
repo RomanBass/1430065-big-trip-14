@@ -121,16 +121,16 @@ const createEditFormTemplate = (tripPoint) => {
 export default class EditForm extends AbstractView {
   constructor(tripPoint) {
     super();
-    //this._tripPoint = tripPoint;
-    this._data = EditForm.parsePointToData(tripPoint);
+    this._tripPoint = tripPoint;
+    //this._data = EditForm.parsePointToData(tripPoint);
 
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
     this._submitButtonClickHandler = this._submitButtonClickHandler.bind(this);
   }
 
   getTemplate() { // создаёт ДОМ элемент формы редактирования
-    // return createEditFormTemplate(this._tripPoint);
-    return createEditFormTemplate(this._data);
+    return createEditFormTemplate(this._tripPoint);
+    //return createEditFormTemplate(this._data);
   }
 
   _rollupButtonClickHandler(evt) { // ?????
@@ -180,8 +180,8 @@ export default class EditForm extends AbstractView {
     return !dataListBlock.hasChildNodes();
   }
 
-  static parsePointToData(point) {
-    return Object.assign({...point, type: 'taxi', offers: [{title: 'Taxy-Option', price: 111}]});
-  }
+  // static parsePointToData(point) {
+  //   return Object.assign({...point, type: 'taxi'});
+  // }
 
 }

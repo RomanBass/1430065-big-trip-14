@@ -23,10 +23,12 @@ export default class Point { // класс точки
     this._handlePointToEditClick = this._handlePointToEditClick.bind(this); // привязка контекста к this
     this._handleEditToPointClick = this._handleEditToPointClick.bind(this); // привязка контекста к this
     this._handleFavoriteButtonClick = this._handleFavoriteButtonClick.bind(this); // привязка контекста к this
+    this._handleTypeFieldset = this._handleTypeFieldset.bind(this);
   }
 
   init(point) {
     this._point = point;
+    this._data = Point.parsePointToData(point);
 
     const prevPointComponent = this._pointComponent;
     const prevEditFormComponent = this._editFormComponent;
@@ -68,6 +70,12 @@ export default class Point { // класс точки
   _replacePointToEditor() { // заменяет элемент точки маршрута на форму редактирования
     replace(this._editFormComponent, this._pointComponent);
 
+    // const getType = (evt) => {
+    //   console.log(evt.target.value);
+    // };
+
+    this._editFormComponent.getElement().querySelector('.event__type-group').addEventListener('change', this._handleTypeFieldset);
+
     const dataList = this._editFormComponent.getDataListBlock(); // код для генерации элементов datalist...
     const citiesNames = getCitiesUniqueNames(tripPoints);
     citiesNames.forEach((cityName) => {
@@ -75,7 +83,7 @@ export default class Point { // класс точки
     });
 
     const optionsBlock = this._editFormComponent.getOptionsBlock(); // код для генерации опций...
-    possibleOffers[this._point.type].forEach((element) => { // отрисовка всех доступных опций
+    possibleOffers[this._data.type].forEach((element) => { // отрисовка всех доступных опций
 
       let isChecked = ''; // добавление атрибута чекет выбранным опциям...
       this._point.offers.forEach((offer) => {
@@ -89,11 +97,11 @@ export default class Point { // класс точки
 
     const picturesContainer = this._editFormComponent.getPhotosBlock(); // код для генерации картинок...
 
-    if (this._point.destination.pictures.length == 0) { // убирает горизонтальный скролл, если у точки нет картинок
+    if (this._data.destination.pictures.length == 0) { // убирает горизонтальный скролл, если у точки нет картинок
       picturesContainer.parentNode.classList.add('visually-hidden');
     }
 
-    this._point.destination.pictures.forEach((element) => {
+    this._data.destination.pictures.forEach((element) => {
       render(picturesContainer, createElement(`<img class="event__photo" src="${element.src}" alt="${element.description}">`), RenderPosition.BEFOREEND);
     });  // ...код для генерации картинок
 
@@ -107,7 +115,7 @@ export default class Point { // класс точки
   }
 
   _handlePointToEditClick() {
-    this._editFormComponent = new EditFormView(this._point); // обновляется форма редактирования, чтобы не дублировались картинки, опции и datalist при неоднократном открытии/закрытии
+    this._editFormComponent = new EditFormView(this._data); // обновляется форма редактирования, чтобы не дублировались картинки, опции и datalist при неоднократном открытии/закрытии
     this._editFormComponent.setRollupButtonClickHandler(this._handleEditToPointClick); // добавляется обработчик в новую форму редактирования
     this._editFormComponent.setSubmitButtonClickHandler(this._handleEditToPointClick); // добавляется обработчик в новую форму редактирования
     this._replacePointToEditor();
@@ -125,5 +133,36 @@ export default class Point { // класс точки
         {isFavorite: !this._point.isFavorite},
       ),
     );
+  }
+
+  static parsePointToData(point, update) {
+    // let Update = {type: 'bus', destination: {description: 'Moscow-Description', name: 'Moscow', pictures: [{src: 'https://mediasole.ru/data/images/349/349442/16s.jpg', description: 'Moscow-Picture-Description'}]}};
+    // Update = null;
+    if (update !== undefined) {
+      return Object.assign({...point, type: update.type});
+    }
+    return point;
+  }
+
+  updateData(update) { //обновляет данные в свойстве _data, а потом вызывает обновление шаблона
+    // if (!update) {
+    //   return;
+    // }
+
+    this._data = Object.assign({...this._data, type: update.type});
+    this.updateElement();
+  }
+
+  updateElement() { // удаляет старый DOM элемент, вызывает генерацию нового и заменяет один на другой. При этом снова зачитывается свойство _data
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+    //console.log('yes');
+    const newElement = this.getElement();
+    parent.replaceChild(newElement, prevElement);
+  }
+
+  _handleTypeFieldset(evt) {
+    this.updateData(evt.target);
   }
 }
