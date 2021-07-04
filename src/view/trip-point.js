@@ -1,9 +1,26 @@
-import {getDuration} from '../mock/trip-point.js';
+import {getDuration} from '../utils/common.js';
 import {makeFavorite} from '../mock/trip-point.js';
 
+const createChosenOptionTemplate = (offer) => {
+  const {title, price} = offer;
+  return `<li class="event__offer">
+  <span class="event__offer-title">${title}</span>
+  &plus;&euro;&nbsp;
+  <span class="event__offer-price">${price}</span>
+</li>`;
+};
+
 export const createTripPointTemplate = (tripPoint) => {
-  const {basePrice, dateFrom, dateTo, type, destination, isFavorite} = tripPoint;
+  const {basePrice, dateFrom, dateTo, type, destination, isFavorite, offers} = tripPoint;
   const {name} = destination;
+
+  const getChosenOptionsTemplate = (offers) =>  { //возвращает ДОМ элемент возможных опции для точки типа type
+    let ChosenOptionsTemplate = '';
+    offers.forEach((offer) => {
+      ChosenOptionsTemplate += createChosenOptionTemplate(offer);
+    });
+    return ChosenOptionsTemplate;
+  };
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -24,13 +41,7 @@ export const createTripPointTemplate = (tripPoint) => {
       &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
-    <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">20</span>
-      </li>
-    </ul>
+    <ul class="event__selected-offers">${getChosenOptionsTemplate(offers)}</ul>
     <button class="event__favorite-btn event__favorite-btn--${makeFavorite(isFavorite)}" type="button">
       <span class="visually-hidden">Add to favorite</span>
       <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

@@ -1,8 +1,90 @@
-export const createEditFormTemplate = (tripPoint) => {
-  const {destination, basePrice, type, dateFrom, dateTo} = tripPoint;
-  const {description, name} = destination;
+import {possibleOffers} from '../mock/trip-point.js';
+import {tripPoints} from '../main.js';
+import {getCitiesUniqueNames} from '../utils/render.js';
+import { BlankPoint } from '../utils/const.js';
 
-  return `<li class="trip-events__item">
+const createDataListTemplate = (cityName) => { //возвращает образец ДОМ элемента в datalist наименований городов
+  return `<option value="${cityName}"></option>`;
+};
+
+const createOptionTemplate = (offer, isChecked) => { //возвращает образец ДОМ элемента опции
+  const {title, price} = offer;
+  return `<div class="event__offer-selector">
+  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${isChecked}>
+  <label class="event__offer-label" for="event-offer-luggage-1">
+    <span class="event__offer-title">${title}</span>
+    &plus;&euro;&nbsp;
+    <span class="event__offer-price">${price}</span>
+  </label>
+</div>`;
+};
+
+const createPhotoTemplate = (picture) => { //возвращает образец ДОМ элемента фотографии
+  return `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
+};
+
+export const createEditFormTemplate = (tripPoint = BlankPoint) => {
+  const {destination, basePrice, type, dateFrom, dateTo, offers} = tripPoint;
+  const {description, name, pictures} = destination;
+
+  const getDatalistContentTemplate = (tripPoints) => {
+    let dataListContentTemplate = '';
+    getCitiesUniqueNames(tripPoints).forEach((city) => {
+      dataListContentTemplate += createDataListTemplate(city);
+    });
+    return dataListContentTemplate;
+  };
+
+  let isOffer = ''; // переменная скрывает блок с опциями, если опции отсутствуют для этой точки
+  if (possibleOffers[type].length == 0){
+    isOffer = 'visually-hidden';
+  }
+
+  const getOptionsTemplate = (possibleOffers) =>  { //возвращает ДОМ элемент возможных опции для точки типа type
+    let OptionsTemplate = '';
+    possibleOffers[type].forEach((option) => {
+      let isChecked = '';
+      offers.forEach((offer) => { //чекает те опции, которые имеются в моках точки
+        if (option.title === offer.title) {
+          isChecked = 'checked';
+        }
+      });
+      OptionsTemplate += createOptionTemplate(option, isChecked);
+    });
+    return OptionsTemplate;
+  };
+
+  const getPhotosTemplate = (pictures) => { //возвращает дом элемент с фотографиями
+    let PhotoTemplate = '';
+    pictures.forEach((picture) => {
+      PhotoTemplate += createPhotoTemplate(picture);
+    });
+    return PhotoTemplate;
+  };
+
+  let isPicture = ''; //переменная скрывает блок фотографий со скролом, если фотографии отсутствуют в данных точки
+  if (pictures.length == 0) {
+    isPicture = 'visually-hidden';
+  }
+
+  let isDestinationInfo = ''; //переменная скрывает блок информации о пункте назначения, если для него отсутствует описание и фотографии
+  if (pictures.length == 0 && description == '') {
+    isDestinationInfo = 'visually-hidden';
+  }
+
+  const isEditForm = { // переменная для определения названия кнопки ресет и нужна ли стрелка закрытия формы
+    ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
+    RESET_BUTTON_NAME: 'Delete',
+    ADD_FORM_CLASS: '',
+  };
+
+  if (tripPoint.id == BlankPoint.id) { // удаляет стрелку и переименовывает кнопку ресет, если это форма добавления
+    isEditForm.ROLLUP_BUTTON_CLASS = 'visually-hidden';
+    isEditForm.RESET_BUTTON_NAME = 'Cancel';
+    isEditForm.ADD_FORM_CLASS = 'visually-hidden';
+  }
+
+  return `<li class="trip-events__item ${isEditForm.ADD_FORM_CLASS}">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -74,11 +156,7 @@ export const createEditFormTemplate = (tripPoint) => {
           ${type}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
-        <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
-        </datalist>
+        <datalist id="destination-list-1">${getDatalistContentTemplate(tripPoints)}</datalist>
       </div>
 
       <div class="event__field-group  event__field-group--time">
@@ -98,66 +176,22 @@ export const createEditFormTemplate = (tripPoint) => {
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">
+      <button class="event__reset-btn" type="reset">${isEditForm.RESET_BUTTON_NAME}</button>
+      <button class="${isEditForm.ROLLUP_BUTTON_CLASS}" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
     </header>
     <section class="event__details">
-      <section class="event__section  event__section--offers">
+      <section class="event__section  event__section--offers ${isOffer}">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-        <div class="event__available-offers">
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-            <label class="event__offer-label" for="event-offer-luggage-1">
-              <span class="event__offer-title">Add luggage</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">50</span>
-            </label>
-          </div>
-
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-            <label class="event__offer-label" for="event-offer-comfort-1">
-              <span class="event__offer-title">Switch to comfort</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">80</span>
-            </label>
-          </div>
-
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-            <label class="event__offer-label" for="event-offer-meal-1">
-              <span class="event__offer-title">Add meal</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">15</span>
-            </label>
-          </div>
-
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-            <label class="event__offer-label" for="event-offer-seats-1">
-              <span class="event__offer-title">Choose seats</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">5</span>
-            </label>
-          </div>
-
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-            <label class="event__offer-label" for="event-offer-train-1">
-              <span class="event__offer-title">Travel by train</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">40</span>
-            </label>
-          </div>
-        </div>
+        <div class="event__available-offers">${getOptionsTemplate(possibleOffers)}</div>
       </section>
-
-      <section class="event__section  event__section--destination">
+      <section class="event__section  event__section--destination ${isDestinationInfo}">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
+        <div class="event__photos-container  ${isPicture}">
+          <div class="event__photos-tape">${getPhotosTemplate(pictures)}</div>
+        </div>
       </section>
     </section>
   </form>
