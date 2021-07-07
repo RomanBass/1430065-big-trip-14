@@ -1,8 +1,8 @@
 import SiteMenuView from './view/site-menu.js';
 import {createInfoAndPriceTemplate} from './view/info-price.js';
-import {createFiltersTemplate} from './view/filter.js';
-import {createSortingTemplate} from './view/sorting.js';
-import {createEventsList} from './view/events-list.js';
+import FilterView from './view/filter.js';
+import SortingView from './view/sorting.js';
+import EventListView from './view/events-list.js';
 import {createEditFormTemplate} from './view/edit-form.js';
 import {createTripPointTemplate} from './view/trip-point.js';
 import {generateTripPoint} from './mock/trip-point.js';
@@ -24,9 +24,9 @@ const tripEventsElement = document.querySelector('.trip-events');
 
 renderElement(menuElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND); // отрисовки..
 renderTemplate(tripElement, createInfoAndPriceTemplate(getRoutePrice(tripPoints), getRouteDates(tripPoints), getRouteName(tripPoints)), 'afterbegin');
-renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
-renderTemplate(tripEventsElement, createSortingTemplate(), 'beforeend');
-renderTemplate(tripEventsElement, createEventsList(), 'beforeend');
+renderElement(filtersElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripEventsElement, new SortingView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripEventsElement, new EventListView().getElement(), RenderPosition.BEFOREEND);
 
 const tripEventsList = tripEventsElement.querySelector('.trip-events__list'); // переменная - контейнер для списка точек
 
