@@ -1,5 +1,6 @@
 import {getDuration} from '../utils/common.js';
 import {makeFavorite} from '../mock/trip-point.js';
+import { createElement } from '../utils/render.js';
 
 const createChosenOptionTemplate = (offer) => {
   const {title, price} = offer;
@@ -10,7 +11,7 @@ const createChosenOptionTemplate = (offer) => {
 </li>`;
 };
 
-export const createTripPointTemplate = (tripPoint) => {
+const createTripPointTemplate = (tripPoint) => {
   const {basePrice, dateFrom, dateTo, type, destination, isFavorite, offers} = tripPoint;
   const {name} = destination;
 
@@ -54,3 +55,26 @@ export const createTripPointTemplate = (tripPoint) => {
   </div>
 </li>`;
 };
+
+export default class TripPoint {
+  constructor(tripPoint) {
+    this._element = null;
+    this._tripPoint = tripPoint;
+  }
+
+  getTemplate() {
+    return createTripPointTemplate(this._tripPoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

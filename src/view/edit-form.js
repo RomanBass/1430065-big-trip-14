@@ -2,6 +2,7 @@ import {possibleOffers} from '../mock/trip-point.js';
 import {tripPoints} from '../main.js';
 import {getCitiesUniqueNames} from '../utils/render.js';
 import { BlankPoint } from '../utils/const.js';
+import { createElement } from '../utils/render.js';
 
 const createDataListTemplate = (cityName) => { //возвращает образец ДОМ элемента в datalist наименований городов
   return `<option value="${cityName}"></option>`;
@@ -23,7 +24,7 @@ const createPhotoTemplate = (picture) => { //возвращает образец
   return `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
 };
 
-export const createEditFormTemplate = (tripPoint = BlankPoint) => {
+const createEditFormTemplate = (tripPoint) => {
   const {destination, basePrice, type, dateFrom, dateTo, offers} = tripPoint;
   const {description, name, pictures} = destination;
 
@@ -197,3 +198,26 @@ export const createEditFormTemplate = (tripPoint = BlankPoint) => {
   </form>
 </li>`;
 };
+
+export default class EditForm {
+  constructor(tripPoint = BlankPoint) {
+    this._element = null;
+    this._tripPoint = tripPoint;
+  }
+
+  getTemplate() {
+    return createEditFormTemplate(this._tripPoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
