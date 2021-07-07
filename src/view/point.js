@@ -1,5 +1,5 @@
 import {getDuration} from '../utils/common.js';
-import {makeFavorite} from '../mock/trip-point.js';
+import {makeFavorite} from '../mock/point.js';
 import { createElement } from '../utils/render.js';
 
 const createChosenOptionTemplate = (offer) => {
@@ -11,8 +11,8 @@ const createChosenOptionTemplate = (offer) => {
 </li>`;
 };
 
-const createTripPointTemplate = (tripPoint) => {
-  const {basePrice, dateFrom, dateTo, type, destination, isFavorite, offers} = tripPoint;
+const createPointTemplate = (Point) => {
+  const {basePrice, dateFrom, dateTo, type, destination, isFavorite, offers} = Point;
   const {name} = destination;
 
   const getChosenOptionsTemplate = (offers) =>  { //возвращает ДОМ элемент возможных опции для точки типа type
@@ -56,14 +56,14 @@ const createTripPointTemplate = (tripPoint) => {
 </li>`;
 };
 
-export default class TripPoint {
-  constructor(tripPoint) {
+export default class Point {
+  constructor(Point) {
     this._element = null;
-    this._tripPoint = tripPoint;
+    this._Point = Point;
   }
 
   getTemplate() {
-    return createTripPointTemplate(this._tripPoint);
+    return createPointTemplate(this._Point);
   }
 
   getElement() {

@@ -60,7 +60,7 @@ export const makeFavorite = (isFavorite) => { // добавляется к то�
   return isFavorite === true ? 'active' : '';
 };
 
-export const generateTripPoint = () => {
+export const generatePoint = () => {
   const startDate = dayjs().add(getRandomInteger(-5, 10), 'day').add(getRandomInteger(0, 23), 'hour').add(getRandomInteger(0, 59), 'minute');
   const finishDate = startDate.add(getRandomInteger(0, 3), 'day').add(getRandomInteger(0, 23), 'hour').add(getRandomInteger(0, 59), 'minute');
   const getType = () => {

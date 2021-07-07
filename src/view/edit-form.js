@@ -1,5 +1,5 @@
-import {possibleOffers} from '../mock/trip-point.js';
-import {tripPoints} from '../main.js';
+import {possibleOffers} from '../mock/point.js';
+import {points} from '../main.js';
 import {getCitiesUniqueNames} from '../utils/render.js';
 import { BlankPoint } from '../utils/const.js';
 import { createElement } from '../utils/render.js';
@@ -24,13 +24,13 @@ const createPhotoTemplate = (picture) => { //возвращает образец
   return `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
 };
 
-const createEditFormTemplate = (tripPoint) => {
-  const {destination, basePrice, type, dateFrom, dateTo, offers} = tripPoint;
+const createEditFormTemplate = (Point) => {
+  const {destination, basePrice, type, dateFrom, dateTo, offers} = Point;
   const {description, name, pictures} = destination;
 
-  const getDatalistContentTemplate = (tripPoints) => {
+  const getDatalistContentTemplate = (points) => {
     let dataListContentTemplate = '';
-    getCitiesUniqueNames(tripPoints).forEach((city) => {
+    getCitiesUniqueNames(points).forEach((city) => {
       dataListContentTemplate += createDataListTemplate(city);
     });
     return dataListContentTemplate;
@@ -79,7 +79,7 @@ const createEditFormTemplate = (tripPoint) => {
     ADD_FORM_CLASS: '',
   };
 
-  if (tripPoint.id == BlankPoint.id) { // удаляет стрелку и переименовывает кнопку ресет, если это форма добавления
+  if (Point.id == BlankPoint.id) { // удаляет стрелку и переименовывает кнопку ресет, если это форма добавления
     isEditForm.ROLLUP_BUTTON_CLASS = 'visually-hidden';
     isEditForm.RESET_BUTTON_NAME = 'Cancel';
     isEditForm.ADD_FORM_CLASS = 'visually-hidden';
@@ -157,7 +157,7 @@ const createEditFormTemplate = (tripPoint) => {
           ${type}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
-        <datalist id="destination-list-1">${getDatalistContentTemplate(tripPoints)}</datalist>
+        <datalist id="destination-list-1">${getDatalistContentTemplate(points)}</datalist>
       </div>
 
       <div class="event__field-group  event__field-group--time">
@@ -200,13 +200,13 @@ const createEditFormTemplate = (tripPoint) => {
 };
 
 export default class EditForm {
-  constructor(tripPoint = BlankPoint) {
+  constructor(Point = BlankPoint) {
     this._element = null;
-    this._tripPoint = tripPoint;
+    this._Point = Point;
   }
 
   getTemplate() {
-    return createEditFormTemplate(this._tripPoint);
+    return createEditFormTemplate(this._Point);
   }
 
   getElement() {
