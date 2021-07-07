@@ -30,11 +30,14 @@ render(tripEventsElement, new EventListView().getElement(), RenderPosition.BEFOR
 
 const tripEventsList = tripEventsElement.querySelector('.trip-events__list'); // переменная - контейнер для списка точек
 
-render(tripEventsList, new EditFormView().getElement(), RenderPosition.BEFOREEND); // отрисовка формы создания точки
-render(tripEventsList, new EditFormView(tripPoints[0]).getElement(), RenderPosition.BEFOREEND); // отрисовка формы редактирования точки
+const renderPoint = (tripEventsList, tripPoint) => {
+  const pointComponent = new TripPointView(tripPoint);
+  const editFormComponent = new EditFormView(tripPoint);
+  render (tripEventsList, pointComponent.getElement(), RenderPosition.BEFOREEND);
+};
 
 for (let i = 1; i < TRIP_POINT_COUNT; i++) { // отрисовка точек маршрута
-  render(tripEventsList, new TripPointView(tripPoints[i]).getElement(), RenderPosition.BEFOREEND);
+  renderPoint(tripEventsList, tripPoints[i]);
 }
 
 export {tripPoints};
