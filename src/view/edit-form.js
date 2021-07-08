@@ -24,8 +24,8 @@ const createPhotoTemplate = (picture) => { //возвращает образец
   return `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
 };
 
-const createEditFormTemplate = (Point) => {
-  const {destination, basePrice, type, dateFrom, dateTo, offers} = Point;
+const createEditFormTemplate = (point) => {
+  const {destination, basePrice, type, dateFrom, dateTo, offers} = point;
   const {description, name, pictures} = destination;
 
   const getDatalistContentTemplate = (points) => {
@@ -79,7 +79,7 @@ const createEditFormTemplate = (Point) => {
     ADD_FORM_CLASS: '',
   };
 
-  if (Point.id == BlankPoint.id) { // удаляет стрелку и переименовывает кнопку ресет, если это форма добавления
+  if (point.id == BlankPoint.id) { // удаляет стрелку и переименовывает кнопку ресет, если это форма добавления
     isEditForm.ROLLUP_BUTTON_CLASS = 'visually-hidden';
     isEditForm.RESET_BUTTON_NAME = 'Cancel';
     isEditForm.ADD_FORM_CLASS = 'visually-hidden';
@@ -200,13 +200,13 @@ const createEditFormTemplate = (Point) => {
 };
 
 export default class EditForm {
-  constructor(Point = BlankPoint) {
+  constructor(point = BlankPoint) {
     this._element = null;
-    this._Point = Point;
+    this._point = point;
   }
 
   getTemplate() {
-    return createEditFormTemplate(this._Point);
+    return createEditFormTemplate(this._point);
   }
 
   getElement() {

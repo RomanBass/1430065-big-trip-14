@@ -30,9 +30,32 @@ render(tripEventsElement, new EventListView().getElement(), RenderPosition.BEFOR
 
 const tripEventsList = tripEventsElement.querySelector('.trip-events__list'); // переменная - контейнер для списка точек
 
-const renderPoint = (tripEventsList, Point) => {
-  const pointComponent = new PointView(Point);
-  const editFormComponent = new EditFormView(Point);
+const renderPoint = (tripEventsList, point) => {
+  const pointComponent = new PointView(point);
+  const editFormComponent = new EditFormView(point);
+
+  const replacePointToForm = () => {
+    tripEventsList.replaceChild(editFormComponent.getElement(), pointComponent.getElement());
+  };
+
+  const replaceEditFormToPoint = () => {
+    tripEventsList.replaceChild(pointComponent.getElement(), editFormComponent.getElement());
+  };
+
+  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
+    replacePointToForm();
+  });
+
+  editFormComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
+    replaceEditFormToPoint();
+  });
+
+  editFormComponent.getElement().querySelector('form').addEventListener('submit', (evt) => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
+    evt.preventDefault();
+    replaceEditFormToPoint();
+  });
+
+
   render (tripEventsList, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
