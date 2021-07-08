@@ -42,17 +42,28 @@ const renderPoint = (tripEventsList, point) => {
     tripEventsList.replaceChild(pointComponent.getElement(), editFormComponent.getElement());
   };
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceEditFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
     replacePointToForm();
+    document.addEventListener('keydown', onEscKeyDown);
   });
 
   editFormComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
     replaceEditFormToPoint();
+    document.removeEventListener('keydown', onEscKeyDown);
   });
 
   editFormComponent.getElement().querySelector('form').addEventListener('submit', (evt) => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
     evt.preventDefault();
     replaceEditFormToPoint();
+    document.removeEventListener('keydown', onEscKeyDown);
   });
 
 
