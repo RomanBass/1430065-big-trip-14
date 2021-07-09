@@ -8,8 +8,9 @@ import { getRouteDates, getRoutePrice, getRouteName } from './utils/route.js';
 import {render, RenderPosition} from './utils/render.js';
 import PointView from './view/point';
 import EditFormView from './view/edit-form.js';
+import NoPointView from './view/no-point.js';
 
-const POINTS_COUNT = 20;
+const POINTS_COUNT = 10;
 const points = new Array(POINTS_COUNT).fill().map(generatePoint); // массив точек маршрута
 
 points.sort((a, b) => { // сортировка точек по dateFrom
@@ -21,14 +22,6 @@ const menuElement = siteHeaderElement.querySelector('.trip-controls__navigation'
 const tripElement = siteHeaderElement.querySelector('.trip-main');
 const filtersElement = siteHeaderElement.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
-
-render(menuElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND); // отрисовки компонентов...
-render(tripElement, new InfoAndPriceView(getRoutePrice(points), getRouteDates(points), getRouteName(points)).getElement(), RenderPosition.AFTERBEGIN);
-render(filtersElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
-render(tripEventsElement, new SortingView().getElement(), RenderPosition.BEFOREEND);
-render(tripEventsElement, new EventListView().getElement(), RenderPosition.BEFOREEND);
-
-const tripEventsList = tripEventsElement.querySelector('.trip-events__list'); // переменная - контейнер для списка точек
 
 const renderPoint = (tripEventsList, point) => {
   const pointComponent = new PointView(point);
@@ -66,12 +59,24 @@ const renderPoint = (tripEventsList, point) => {
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-
   render (tripEventsList, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-for (let i = 1; i < POINTS_COUNT; i++) { // отрисовка точек маршрута
-  renderPoint(tripEventsList, points[i]);
+render(menuElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND); // отрисовки компонентов...
+render(filtersElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
+
+if (points.length == 0) { // если в данных нет ни одной точки, то выводится сообщение Click new event
+  render(tripEventsElement, new NoPointView().getElement(), RenderPosition.BEFOREEND);
+} else {
+  render(tripElement, new InfoAndPriceView(getRoutePrice(points), getRouteDates(points), getRouteName(points)).getElement(), RenderPosition.AFTERBEGIN); // отрисовки компонентов...
+  render(tripEventsElement, new SortingView().getElement(), RenderPosition.AFTERBEGIN);
+  render(tripEventsElement, new EventListView().getElement(), RenderPosition.BEFOREEND);
+
+  const tripEventsList = tripEventsElement.querySelector('.trip-events__list'); // переменная - контейнер для списка точек
+
+  for (let i = 0; i < POINTS_COUNT; i++) { // отрисовка точек маршрута
+    renderPoint(tripEventsList, points[i]);
+  }
 }
 
 export {points};
