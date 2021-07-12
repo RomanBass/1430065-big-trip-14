@@ -2,7 +2,7 @@ import SiteMenuView from './view/site-menu.js';
 import InfoAndPriceView from './view/info-price.js';
 import FilterView from './view/filter.js';
 import SortingView from './view/sorting.js';
-import EventListView from './view/events-list.js';
+import EventsListView from './view/events-list.js';
 import {generatePoint} from './mock/point.js';
 import { getRouteDates, getRoutePrice, getRouteName } from './utils/route.js';
 import {render, RenderPosition} from './utils/render.js';
@@ -10,7 +10,7 @@ import PointView from './view/point';
 import EditFormView from './view/edit-form.js';
 import NoPointView from './view/no-point.js';
 
-const POINTS_COUNT = 10;
+const POINTS_COUNT = 6;
 const points = new Array(POINTS_COUNT).fill().map(generatePoint); // массив точек маршрута
 
 points.sort((a, b) => { // сортировка точек по dateFrom
@@ -70,7 +70,7 @@ if (points.length == 0) { // если в данных нет ни одной т�
 } else {
   render(tripElement, new InfoAndPriceView(getRoutePrice(points), getRouteDates(points), getRouteName(points)).getElement(), RenderPosition.AFTERBEGIN); // отрисовки компонентов...
   render(tripEventsElement, new SortingView().getElement(), RenderPosition.AFTERBEGIN);
-  render(tripEventsElement, new EventListView().getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new EventsListView().getElement(), RenderPosition.BEFOREEND);
 
   const tripEventsList = tripEventsElement.querySelector('.trip-events__list'); // переменная - контейнер для списка точек
 
