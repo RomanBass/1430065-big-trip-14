@@ -2,7 +2,7 @@ import {possibleOffers} from '../mock/point.js';
 import {points} from '../main.js';
 import {getCitiesUniqueNames} from '../utils/render.js';
 import { BlankPoint } from '../utils/const.js';
-import { createElement } from '../utils/render.js';
+import AbstractView from './abstract.js';
 
 const createDataListTemplate = (cityName) => { //возвращает образец ДОМ элемента в datalist наименований городов
   return `<option value="${cityName}"></option>`;
@@ -199,25 +199,13 @@ const createEditFormTemplate = (point) => {
 </li>`;
 };
 
-export default class EditForm {
-  constructor(point = BlankPoint) {
-    this._element = null;
+export default class EditForm extends AbstractView {
+  constructor(point) {
+    super();
     this._point = point;
   }
 
   getTemplate() {
     return createEditFormTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

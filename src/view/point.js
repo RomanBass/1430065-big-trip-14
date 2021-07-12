@@ -1,6 +1,6 @@
 import {getDuration} from '../utils/common.js';
 import {makeFavorite} from '../mock/point.js';
-import { createElement } from '../utils/render.js';
+import AbstractView from './abstract.js';
 
 const createChosenOptionTemplate = (offer) => {
   const {title, price} = offer;
@@ -11,8 +11,8 @@ const createChosenOptionTemplate = (offer) => {
 </li>`;
 };
 
-const createPointTemplate = (Point) => {
-  const {basePrice, dateFrom, dateTo, type, destination, isFavorite, offers} = Point;
+const createPointTemplate = (point) => {
+  const {basePrice, dateFrom, dateTo, type, destination, isFavorite, offers} = point;
   const {name} = destination;
 
   const getChosenOptionsTemplate = (offers) =>  { //возвращает ДОМ элемент возможных опции для точки типа type
@@ -56,25 +56,13 @@ const createPointTemplate = (Point) => {
 </li>`;
 };
 
-export default class Point {
-  constructor(Point) {
-    this._element = null;
-    this._Point = Point;
+export default class Point extends AbstractView {
+  constructor(point) {
+    super();
+    this._point = point;
   }
 
   getTemplate() {
-    return createPointTemplate(this._Point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return createPointTemplate(this._point);
   }
 }

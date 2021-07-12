@@ -10,7 +10,7 @@ import PointView from './view/point';
 import EditFormView from './view/edit-form.js';
 import NoPointView from './view/no-point.js';
 
-const POINTS_COUNT = 6;
+const POINTS_COUNT = 5;
 const points = new Array(POINTS_COUNT).fill().map(generatePoint); // массив точек маршрута
 
 points.sort((a, b) => { // сортировка точек по dateFrom
