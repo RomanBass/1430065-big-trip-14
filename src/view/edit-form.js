@@ -203,9 +203,32 @@ export default class EditForm extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
+
+    this._editFormRollupButtonClickHandler = this._editFormRollupButtonClickHandler.bind(this);
+    this._editFormSubmitButtonClickHandler = this._editFormSubmitButtonClickHandler.bind(this);
   }
 
   getTemplate() {
     return createEditFormTemplate(this._point);
+  }
+
+  _editFormRollupButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editFormRollupButtonClick();
+  }
+
+  setEditFormRollupButtonClickHandler(callback) {
+    this._callback.editFormRollupButtonClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editFormRollupButtonClickHandler);
+  }
+
+  _editFormSubmitButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editFormRollupButtonClick();
+  }
+
+  setEditFormSubmitButtonClickHandler(callback) {
+    this._callback.editFormSubmitButtonClick = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._editFormSubmitButtonClickHandler);
   }
 }

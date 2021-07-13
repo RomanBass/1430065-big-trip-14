@@ -43,17 +43,17 @@ const renderPoint = (tripEventsList, point) => {
     }
   };
 
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
+  pointComponent.setPointRollupButtonClickHandler(() => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
     replacePointToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  editFormComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
+  editFormComponent.setEditFormRollupButtonClickHandler(() => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
     replaceEditFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  editFormComponent.getElement().querySelector('form').addEventListener('submit', (evt) => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
+  editFormComponent.setEditFormSubmitButtonClickHandler((evt) => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
     evt.preventDefault();
     replaceEditFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
@@ -65,7 +65,7 @@ const renderPoint = (tripEventsList, point) => {
 render(menuElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND); // отрисовки компонентов...
 render(filtersElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
 
-if (points.length == 0) { // если в данных нет ни одной точки, то выводится сообщение Click new event
+if (points.length == 0) { // если в данных нет ни одной точки, то выводится сообщение "Click new event..."
   render(tripEventsElement, new NoPointView().getElement(), RenderPosition.BEFOREEND);
 } else {
   render(tripElement, new InfoAndPriceView(getRoutePrice(points), getRouteDates(points), getRouteName(points)).getElement(), RenderPosition.AFTERBEGIN); // отрисовки компонентов...
