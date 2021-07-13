@@ -29,5 +29,14 @@ const getRouteName = (point) => { // вернуть имя маршрута
   return routeName;
 };
 
-export {getRoutePrice, getRouteName, getRouteDates};
 
+const getCitiesUniqueNames = (points) => { // выдаёт отсортированный массив уникальных названий городов из массива точек маршрута
+  let citiesNames = new Set();
+  points.forEach((point) => {
+    citiesNames.add(point.destination.name);
+  });
+  citiesNames = Array.from(citiesNames).sort(); // преобразовывает сет в массив, чтобы отсортировать данные по алфавиту
+  return citiesNames;
+};
+
+export {getRoutePrice, getRouteName, getRouteDates, getCitiesUniqueNames};

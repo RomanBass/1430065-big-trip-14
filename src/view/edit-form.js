@@ -1,6 +1,6 @@
 import {possibleOffers} from '../mock/point.js';
 import {points} from '../main.js';
-import {getCitiesUniqueNames} from '../utils/render.js';
+import {getCitiesUniqueNames} from '../utils/route.js';
 import { BlankPoint } from '../utils/const.js';
 import AbstractView from './abstract.js';
 
