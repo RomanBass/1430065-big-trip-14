@@ -1,16 +1,12 @@
 import SiteMenuView from './view/site-menu.js';
 import InfoAndPriceView from './view/info-price.js';
 import FilterView from './view/filter.js';
-import SortingView from './view/sorting.js'; // |---> относятся к презентеру маршрута
-import EventsListView from './view/events-list.js';
-import PointView from './view/point';
-import EditFormView from './view/edit-form.js';
-import NoPointView from './view/no-point.js';
 import {generatePoint} from './mock/point.js';
 import { getRouteDates, getRoutePrice, getRouteName } from './utils/route.js';
-import {render, RenderPosition, replace /*remove*/} from './utils/render.js';
+import {render, RenderPosition} from './utils/render.js';
+import TripPresenter from './presenter/trip.js';
 
-const POINTS_COUNT = 5;
+const POINTS_COUNT = 4;
 const points = new Array(POINTS_COUNT).fill().map(generatePoint); // массив точек маршрута
 
 points.sort((a, b) => { // сортировка точек по dateFrom
@@ -23,64 +19,14 @@ const tripElement = siteHeaderElement.querySelector('.trip-main');
 const filtersElement = siteHeaderElement.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
 
-const renderPoint = (tripEventsList, point) => {
-  const pointComponent = new PointView(point);
-  const editFormComponent = new EditFormView(point);
-
-  const replacePointToForm = () => {
-    replace(editFormComponent, pointComponent);
-  };
-
-  const replaceEditFormToPoint = () => {
-    replace(pointComponent, editFormComponent);
-  };
-
-  const onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      replaceEditFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    }
-  };
-
-  pointComponent.setPointRollupButtonClickHandler(() => { // клик по стрелке закрывает точку маршрута и открывает форму редактирования
-    replacePointToForm();
-    document.addEventListener('keydown', onEscKeyDown);
-  });
-
-  editFormComponent.setEditFormRollupButtonClickHandler(() => { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
-    replaceEditFormToPoint();
-    document.removeEventListener('keydown', onEscKeyDown);
-  });
-
-  editFormComponent.setEditFormSubmitButtonClickHandler((evt) => { // клик по кнопке Save закрывает форму редактирования и открывает точку маршрута
-    evt.preventDefault();
-    replaceEditFormToPoint();
-    document.removeEventListener('keydown', onEscKeyDown);
-  });
-
-  render(tripEventsList, pointComponent, RenderPosition.BEFOREEND);
-};
-
 render(menuElement, new SiteMenuView(), RenderPosition.BEFOREEND); // отрисовки компонентов...
 render(filtersElement, new FilterView(), RenderPosition.BEFOREEND);
 
-if (points.length !== 0) { // если в данных нет ни одной точки, то элемент с информацией не отрисовывается
+if (points.length !== 0) { // элемент с информацией отрисовывается, только если в данных нет ни одной точки
   render(tripElement, new InfoAndPriceView(getRoutePrice(points), getRouteDates(points), getRouteName(points)), RenderPosition.AFTERBEGIN);
 }
 
-if (points.length == 0) { // если в данных нет ни одной точки, то выводится сообщение "Click new event..."
-  render(tripEventsElement, new NoPointView(), RenderPosition.BEFOREEND);
-} else {
-  //render(tripElement, new InfoAndPriceView(getRoutePrice(points), getRouteDates(points), getRouteName(points)), RenderPosition.AFTERBEGIN); // отрисовки компонентов...
-  render(tripEventsElement, new SortingView(), RenderPosition.AFTERBEGIN);
-  render(tripEventsElement, new EventsListView(), RenderPosition.BEFOREEND);
-
-  const tripEventsList = tripEventsElement.querySelector('.trip-events__list'); // переменная - контейнер для списка точек
-
-  for (let i = 0; i < POINTS_COUNT; i++) { // отрисовка точек маршрута
-    renderPoint(tripEventsList, points[i]);
-  }
-}
+const tripPresenter = new TripPresenter(tripEventsElement);
+tripPresenter.init(points);
 
 export {points};
