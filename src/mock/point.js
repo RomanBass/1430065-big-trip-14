@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import { CITIES, TYPES, PHOTO_DESCRIPTIONS, OfferTitles, DESCRIPTION_SENTENCES } from '../utils/const.js';
 import { getRandomInteger } from '../utils/common.js';
 
@@ -77,7 +78,7 @@ export const generatePoint = () => {
       name: CITIES[getRandomInteger(0, CITIES.length - 1)],
       pictures: getPictures(),
     },
-    id: 0,
+    id: nanoid(),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     offers: getOffers(TYPE),
     type: TYPE,

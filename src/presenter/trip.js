@@ -10,6 +10,7 @@ export default class Trip {
     this._sortingComponent = new SortingView();
     this._noPointComponent = new NoPointView();
     this._eventsListComponent = new EventsListView();
+    this._pointPresenters = {};
   }
 
   init(points) {
@@ -24,6 +25,13 @@ export default class Trip {
     }
   }
 
+  _clearPointsList() { // удаление всех точек
+    Object
+      .values(this._pointPresenters)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenters = {};
+  }
+
   _renderSort() {
     render(this._tripContainer, this._sortingComponent, RenderPosition.AFTERBEGIN);
   }
@@ -31,6 +39,7 @@ export default class Trip {
   _renderPoint(point) {
     const pointPresenter = new PointPresenter(this._eventsListComponent);
     pointPresenter.init(point);
+    this._pointPresenters[point.id] = pointPresenter;
   }
 
   _renderPoints() {
