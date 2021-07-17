@@ -1,6 +1,6 @@
 import PointView from '../view/point';
 import EditFormView from '../view/edit-form.js';
-import { render, RenderPosition, replace } from '../utils/render';
+import { render, RenderPosition, replace, remove } from '../utils/render';
 
 export default class Point {
   constructor(eventListContainer) {
@@ -15,6 +15,9 @@ export default class Point {
   init(point) {
     this._point = point;
 
+    const prevPointComponent = this._pointComponent;
+    const prevEditFormComponent = this._editFormComponent;
+
     this._pointComponent = new PointView(point);
     this._editFormComponent = new EditFormView(point);
 
@@ -22,11 +25,30 @@ export default class Point {
     this._editFormComponent.setEditFormRollupButtonClickHandler(this._handleEditFormToPointClick);
     this._editFormComponent.setEditFormSubmitButtonClickHandler(this._handleEditFormToPointClick);
 
-    render(this._eventListContainer, this._pointComponent, RenderPosition.BEFOREEND);
+    if (prevPointComponent === null || prevEditFormComponent === null) {
+      render(this._eventListContainer, this._pointComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    if (this._eventListContainer.getElement().contains(prevPointComponent.getElement())) {
+      replace(this._pointComponent, prevPointComponent);
+    }
+
+    if (this._eventListContainer.getElement().contains(prevEditFormComponent.getElement())) {
+      replace(this._editFormComponent, prevEditFormComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevEditFormComponent);
+  }
+
+  destroy() {
+    remove(this._pointComponent);
+    remove(this._editFormComponent);
   }
 
   _replacePointToForm() {
-    replace(this._editFormComponent, this._pointComponent);
+    replace(this._editFormComponent, this._pointComponent.getElement());
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
 
