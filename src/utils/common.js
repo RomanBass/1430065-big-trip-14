@@ -22,3 +22,17 @@ export const getDuration = (startDate, finishDate) => { // преобразов�
   }
   return duration;
 };
+
+export const updateItem = (items, update) => { // заменяет элемент массива на обновлённый элемент по ID-шнику
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};

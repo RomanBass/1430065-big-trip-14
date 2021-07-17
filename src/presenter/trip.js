@@ -3,6 +3,7 @@ import NoPointView from '../view/no-point.js';
 import EventsListView from '../view/events-list.js';
 import {render, RenderPosition} from '../utils/render.js';
 import PointPresenter from './point.js';
+import { updateItem } from '../utils/common.js';
 
 export default class Trip {
   constructor(tripContainer) {
@@ -11,6 +12,8 @@ export default class Trip {
     this._noPointComponent = new NoPointView();
     this._eventsListComponent = new EventsListView();
     this._pointPresenters = {};
+
+    this._handlePointChange = this._handlePointChange.bind(this);
   }
 
   init(points) {
@@ -25,11 +28,16 @@ export default class Trip {
     }
   }
 
-  _clearPointsList() { // удаление всех точек
+  _clearPointsList() { // удаляет все точки
     Object
       .values(this._pointPresenters)
       .forEach((presenter) => presenter.destroy());
     this._pointPresenters = {};
+  }
+
+  _handlePointChange(updatedPoint) { // изменяет данные точки
+    this._points = updateItem(this._points, updatedPoint); // заменяет в моках точек объект с данными у изменённой точки
+    this._pointPresenters[updatedPoint.id].init(updatedPoint); // инициализирует презентер точки с обновлёнными данными
   }
 
   _renderSort() {
