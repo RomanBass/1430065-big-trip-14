@@ -224,7 +224,7 @@ export default class EditForm extends AbstractView {
 
   _editFormSubmitButtonClickHandler(evt) {
     evt.preventDefault();
-    this._callback.editFormRollupButtonClick();
+    this._callback.editFormSubmitButtonClick(this._point);
   }
 
   setEditFormSubmitButtonClickHandler(callback) {

@@ -3,13 +3,16 @@ import EditFormView from '../view/edit-form.js';
 import { render, RenderPosition, replace, remove } from '../utils/render';
 
 export default class Point {
-  constructor(eventListContainer) {
+  constructor(eventListContainer, changeData) {
     this._eventListContainer = eventListContainer;
     this._pointComponent = null;
     this._editFormComponent = null;
+    this._changeData = changeData;
 
     this._handlePointToEditFormClick = this._handlePointToEditFormClick.bind(this);
     this._handleEditFormToPointClick = this._handleEditFormToPointClick.bind(this);
+    this._handleFavoriteButtonClick = this._handleFavoriteButtonClick.bind(this);
+    this._handleEditFormSubmit = this._handleEditFormSubmit.bind(this);
   }
 
   init(point) {
@@ -23,7 +26,8 @@ export default class Point {
 
     this._pointComponent.setPointRollupButtonClickHandler(this._handlePointToEditFormClick);
     this._editFormComponent.setEditFormRollupButtonClickHandler(this._handleEditFormToPointClick);
-    this._editFormComponent.setEditFormSubmitButtonClickHandler(this._handleEditFormToPointClick);
+    this._editFormComponent.setEditFormSubmitButtonClickHandler(this._handleEditFormSubmit);
+    this._pointComponent.setFavoriteButtonClickHandler(this._handleFavoriteButtonClick);
 
     if (prevPointComponent === null || prevEditFormComponent === null) {
       render(this._eventListContainer, this._pointComponent, RenderPosition.BEFOREEND);
@@ -70,6 +74,21 @@ export default class Point {
   }
 
   _handleEditFormToPointClick() { // клик по стрелке закрывает форму редактирования и открывает точку маршрута
+    this._replaceEditFormToPoint();
+  }
+
+  _handleFavoriteButtonClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._point,
+        {isFavorite: !this._point.isFavorite},
+      ),
+    );
+  }
+
+  _handleEditFormSubmit(point) {
+    this._changeData(point);
     this._replaceEditFormToPoint();
   }
 
