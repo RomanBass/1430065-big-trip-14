@@ -14,6 +14,7 @@ export default class Trip {
     this._pointPresenters = {};
 
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(points) {
@@ -35,6 +36,12 @@ export default class Trip {
     this._pointPresenters = {};
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._pointPresenters)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _handlePointChange(updatedPoint) { // изменяет данные точки
     this._points = updateItem(this._points, updatedPoint); // заменяет в моках точек объект с данными у изменённой точки
     this._pointPresenters[updatedPoint.id].init(updatedPoint); // инициализирует презентер точки с обновлёнными данными
@@ -45,7 +52,7 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._eventsListComponent, this._handlePointChange);
+    const pointPresenter = new PointPresenter(this._eventsListComponent, this._handlePointChange, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenters[point.id] = pointPresenter;
   }

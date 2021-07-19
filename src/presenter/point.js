@@ -2,12 +2,19 @@ import PointView from '../view/point';
 import EditFormView from '../view/edit-form.js';
 import { render, RenderPosition, replace, remove } from '../utils/render';
 
+const Mode = { // определяет режим отображения - точка или форма редактирования
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export default class Point {
-  constructor(eventListContainer, changeData) {
+  constructor(eventListContainer, changeData, changeMode) {
     this._eventListContainer = eventListContainer;
     this._pointComponent = null;
     this._editFormComponent = null;
     this._changeData = changeData;
+    this._changeMode = changeMode;
+    this._mode = Mode.DEFAULT;
 
     this._handlePointToEditFormClick = this._handlePointToEditFormClick.bind(this);
     this._handleEditFormToPointClick = this._handleEditFormToPointClick.bind(this);
@@ -29,12 +36,12 @@ export default class Point {
     this._editFormComponent.setEditFormSubmitButtonClickHandler(this._handleEditFormSubmit);
     this._pointComponent.setFavoriteButtonClickHandler(this._handleFavoriteButtonClick);
 
-    if (prevPointComponent === null || prevEditFormComponent === null) {
+    if (this._mode === Mode.DEFAULT) {
       render(this._eventListContainer, this._pointComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    if (this._eventListContainer.getElement().contains(prevPointComponent.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._pointComponent, prevPointComponent);
     }
 
@@ -54,11 +61,20 @@ export default class Point {
   _replacePointToForm() {
     replace(this._editFormComponent, this._pointComponent.getElement());
     document.addEventListener('keydown', this._escKeyDownHandler);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _replaceEditFormToPoint() {
     replace(this._pointComponent, this._editFormComponent);
     document.removeEventListener('keydown', this._escKeyDownHandler);
+    this._mode = Mode.DEFAULT;
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditFormToPoint();
+    }
   }
 
   _escKeyDownHandler(evt) {
