@@ -1,4 +1,4 @@
-const getRoutePrice = (points) => { // вернуть стоимость маршрута
+export const getRoutePrice = (points) => { // вернуть стоимость маршрута
   let routePrice = 0;
   points.forEach((point) => {
     routePrice += point.basePrice; // добавление стоимости поездки
@@ -9,7 +9,7 @@ const getRoutePrice = (points) => { // вернуть стоимость мар�
   return routePrice;
 };
 
-const getRouteDates = (point) => { // вернуть время маршрута
+export const getRouteDates = (point) => { // вернуть время маршрута
   let routeDates = `${point[0].dateFrom.format('MMM DD')} &nbsp;&mdash;&nbsp ${point[point.length - 1].dateTo.format('MMM DD')}`;
   if (point[0].dateFrom.format('MMM') == point[point.length - 1].dateTo.format('MMM')) {
     routeDates = `${point[0].dateFrom.format('MMM DD')} &nbsp;&mdash;&nbsp ${point[point.length - 1].dateTo.format('DD')}`;
@@ -17,7 +17,7 @@ const getRouteDates = (point) => { // вернуть время маршрута
   return routeDates;
 };
 
-const getRouteName = (point) => { // вернуть имя маршрута
+export const getRouteName = (point) => { // вернуть имя маршрута
   let routeName = `${point[0].destination.name} ... ${point[point.length - 1].destination.name}` ;
   if (point.length == 3) {
     routeName = `${point[0].destination.name} &mdash; ${point[1].destination.name}  &mdash; ${point[2].destination.name}`;
@@ -30,7 +30,7 @@ const getRouteName = (point) => { // вернуть имя маршрута
 };
 
 
-const getCitiesUniqueNames = (points) => { // выдаёт отсортированный массив уникальных названий городов из массива точек маршрута
+export const getCitiesUniqueNames = (points) => { // выдаёт отсортированный массив уникальных названий городов из массива точек маршрута
   let citiesNames = new Set();
   points.forEach((point) => {
     citiesNames.add(point.destination.name);
@@ -39,4 +39,19 @@ const getCitiesUniqueNames = (points) => { // выдаёт отсортиров�
   return citiesNames;
 };
 
-export {getRoutePrice, getRouteName, getRouteDates, getCitiesUniqueNames};
+export const sortByDateFrom = (pointOne, pointTwo) => {
+  return pointOne.dateFrom - pointTwo.dateFrom;
+};
+
+export const sortByPrice = (pointOne, pointTwo) => {
+  if (pointTwo.basePrice == pointOne.basePrice) { // если у точек одинаковая цена, то они сортируются по дате-времени начала
+    return pointOne.dateFrom - pointTwo.dateFrom;
+  }
+  return pointTwo.basePrice - pointOne.basePrice;
+};
+
+export const sortByDuration = (pointOne, pointTwo) => {
+  const firstTripDuration = pointOne.dateTo - pointOne.dateFrom;
+  const secondTripDuration = pointTwo.dateTo - pointTwo.dateFrom;
+  return secondTripDuration - firstTripDuration;
+};

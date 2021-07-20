@@ -36,16 +36,16 @@ export default class Point {
     this._editFormComponent.setEditFormSubmitButtonClickHandler(this._handleEditFormSubmit);
     this._pointComponent.setFavoriteButtonClickHandler(this._handleFavoriteButtonClick);
 
-    if (this._mode === Mode.DEFAULT) {
+    if (prevPointComponent === null || prevEditFormComponent === null) {
       render(this._eventListContainer, this._pointComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    if (this._mode === Mode.EDITING) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._pointComponent, prevPointComponent);
     }
 
-    if (this._eventListContainer.getElement().contains(prevEditFormComponent.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._editFormComponent, prevEditFormComponent);
     }
 

@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 
-const CITIES = ['London', 'Paris', 'Beijing', 'Tokyo', 'Melbourne'];
-const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const PHOTO_DESCRIPTIONS = ['Beautiful Mountain Sea', 'Island archipelago', 'River Delta', 'Desert Storm', 'Snow Mountains'];
+export const CITIES = ['London', 'Paris', 'Beijing', 'Tokyo', 'Melbourne'];
+export const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+export const PHOTO_DESCRIPTIONS = ['Beautiful Mountain Sea', 'Island archipelago', 'River Delta', 'Desert Storm', 'Snow Mountains'];
 
-const OfferTitles = {
+export const OfferTitles = {
   taxi: ['Taxi-Option-1', 'Taxi-Option-2', 'Taxi-Option-3', 'Taxi-Option-4', 'Taxi-Option-5'],
   bus: [],
   train: ['Train-Option-1', 'Train-Option-2', 'Train-Option-3', 'Train-Option-4', 'Train-Option-5'],
@@ -17,7 +17,7 @@ const OfferTitles = {
   restaurant: ['Restaurant-Option-1', 'Restaurant-Option-2', 'Restaurant-Option-3', 'Restaurant-Option-4', 'Restaurant-Option-5'],
 };
 
-const DESCRIPTION_SENTENCES = [
+export const DESCRIPTION_SENTENCES = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
   'Fusce tristique felis at fermentum pharetra.',
@@ -30,7 +30,7 @@ const DESCRIPTION_SENTENCES = [
   'Nunc fermentum tortor ac porta dapibus.',
   'In rutrum ac purus sit amet tempus.'];
 
-const AddFormData = { // данные для дефолтной точки
+export const AddFormData = { // данные для дефолтной точки
   BASE_PRICE: 150,
   TRIP_DURATION: 3,
   DESTINATION: {description: '', name: '', pictures: []},
@@ -40,7 +40,7 @@ const AddFormData = { // данные для дефолтной точки
   TYPE: 'taxi',
 };
 
-const BlankPoint = { // дефолтная точка для формы добавления
+export const BlankPoint = { // дефолтная точка для формы добавления
   basePrice: AddFormData.BASE_PRICE,
   dateFrom: dayjs(),
   dateTo: dayjs().add(AddFormData.TRIP_DURATION, 'day'),
@@ -51,4 +51,8 @@ const BlankPoint = { // дефолтная точка для формы доба
   type: AddFormData.TYPE,
 };
 
-export {CITIES, TYPES, PHOTO_DESCRIPTIONS, OfferTitles, DESCRIPTION_SENTENCES, BlankPoint};
+export const SortType = {
+  BY_DATE_FROM: 'sort-day',
+  BY_PRICE: 'sort-price',
+  BY_DURATRION: 'sort-time',
+};
