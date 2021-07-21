@@ -54,5 +54,5 @@ export const BlankPoint = { // дефолтная точка для формы �
 export const SortType = {
   BY_DATE_FROM: 'sort-day',
   BY_PRICE: 'sort-price',
-  BY_DURATRION: 'sort-time',
+  BY_DURATION: 'sort-time',
 };

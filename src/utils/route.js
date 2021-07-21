@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const getRoutePrice = (points) => { // вернуть стоимость маршрута
   let routePrice = 0;
   points.forEach((point) => {
@@ -40,18 +42,18 @@ export const getCitiesUniqueNames = (points) => { // выдаёт отсорти
 };
 
 export const sortByDateFrom = (pointOne, pointTwo) => {
-  return pointOne.dateFrom - pointTwo.dateFrom;
+  return dayjs(pointOne.dateFrom).diff(dayjs(pointTwo.dateFrom));
 };
 
 export const sortByPrice = (pointOne, pointTwo) => {
   if (pointTwo.basePrice == pointOne.basePrice) { // если у точек одинаковая цена, то они сортируются по дате-времени начала
-    return pointOne.dateFrom - pointTwo.dateFrom;
+    return dayjs(pointOne.dateFrom).diff(dayjs(pointTwo.dateFrom));
   }
   return pointTwo.basePrice - pointOne.basePrice;
 };
 
 export const sortByDuration = (pointOne, pointTwo) => {
-  const firstTripDuration = pointOne.dateTo - pointOne.dateFrom;
-  const secondTripDuration = pointTwo.dateTo - pointTwo.dateFrom;
-  return secondTripDuration - firstTripDuration;
+  const firstPointTravelDuration = dayjs(pointOne.dateTo).diff(dayjs(pointOne.dateFrom));
+  const secondPointTravelDuration = dayjs(pointTwo.dateTo).diff(dayjs(pointTwo.dateFrom));
+  return secondPointTravelDuration - firstPointTravelDuration;
 };

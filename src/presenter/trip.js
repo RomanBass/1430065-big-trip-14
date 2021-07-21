@@ -4,6 +4,8 @@ import EventsListView from '../view/events-list.js';
 import {render, RenderPosition} from '../utils/render.js';
 import PointPresenter from './point.js';
 import { updateItem } from '../utils/common.js';
+import { SortType } from '../utils/const.js';
+import { sortByDateFrom, sortByPrice, sortByDuration } from '../utils/route.js';
 
 export default class Trip {
   constructor(tripContainer) {
@@ -12,6 +14,7 @@ export default class Trip {
     this._noPointComponent = new NoPointView();
     this._eventsListComponent = new EventsListView();
     this._pointPresenters = {};
+    //this._currentSortType = SortType.BY_DATE_FROM;
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
@@ -20,6 +23,8 @@ export default class Trip {
 
   init(points) {
     this._points = points.slice();
+    this._points.sort(sortByDateFrom);
+    //this._sourcedPoints = points.slice(); // оригинальный массив точек, возможно понадобится в следующих заданиях
 
     if (points.length == 0) { // если точек нет, то отображается заглушка
       this._renderNoPoints();
@@ -45,11 +50,14 @@ export default class Trip {
 
   _handlePointChange(updatedPoint) { // изменяет данные точки
     this._points = updateItem(this._points, updatedPoint); // заменяет в моках точек объект с данными у изменённой точки
+    //this._sourcedPoints = updateItem(this._sourcedPoints, updatedPoint);
     this._pointPresenters[updatedPoint.id].init(updatedPoint); // инициализирует презентер точки с обновлёнными данными
   }
 
   _handleSortTypeChange(sortType) {
-
+    this._sortPoints(sortType);
+    this._clearPointsList();
+    this._renderPoints();
   }
 
   _renderSort() {
@@ -75,4 +83,19 @@ export default class Trip {
     render(this._tripContainer, this._eventsListComponent, RenderPosition.BEFOREEND);
   }
 
+  _sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.BY_DATE_FROM:
+        this._points.sort(sortByDateFrom);
+        break;
+      case SortType.BY_PRICE:
+        this._points.sort(sortByPrice);
+        break;
+      case SortType.BY_DURATION:
+        this._points.sort(sortByDuration);
+        break;
+    }
+
+    //this._currentSortType = sortType;
+  }
 }
