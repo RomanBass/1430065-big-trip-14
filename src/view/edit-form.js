@@ -3,6 +3,7 @@ import {points} from '../main.js';
 import {getCitiesUniqueNames} from '../utils/route.js';
 import { BlankPoint } from '../utils/const.js';
 import AbstractView from './abstract.js';
+import { getDescription, getPictures } from '../mock/point.js';
 
 const createDataListTemplate = (cityName) => { //возвращает образец ДОМ элемента в datalist наименований городов
   return `<option value="${cityName}"></option>`;
@@ -206,6 +207,9 @@ export default class EditForm extends AbstractView {
 
     this._editFormRollupButtonClickHandler = this._editFormRollupButtonClickHandler.bind(this);
     this._editFormSubmitButtonClickHandler = this._editFormSubmitButtonClickHandler.bind(this);
+    this._typeFieldsetChangeHandler = this._typeFieldsetChangeHandler.bind(this);
+    this._destinationInputChangeHandler = this._destinationInputChangeHandler.bind(this);
+    this._setInnerHandlers();
   }
 
   getTemplate() {
@@ -230,5 +234,50 @@ export default class EditForm extends AbstractView {
   setEditFormSubmitButtonClickHandler(callback) {
     this._callback.editFormSubmitButtonClick = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._editFormSubmitButtonClickHandler);
+  }
+
+  updateElement() { //генерирует новый дом элемент, заменяет им старый, удаляет старый
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+    const newElement = this.getElement();
+    parent.replaceChild(newElement, prevElement);
+    this.restoreHandlers(); //восстанавливает обработчики
+  }
+
+  updateData(update) { //обновляет данные точки
+    if (!update) {
+      return;
+    }
+    this._point = Object.assign(
+      {},
+      this._point,
+      update,
+    );
+    this.updateElement();
+  }
+
+  _typeFieldsetChangeHandler(evt) { //обработчик fieldset по изменению типа точки
+    this.updateData({
+      type: evt.target.value,
+    });
+  }
+
+  _destinationInputChangeHandler(evt) { //обработчик input ввода названия города
+    this.updateData({
+      destination: {description: getDescription(), name: evt.target.value, pictures: getPictures()},
+    });
+  }
+
+  restoreHandlers() { //восстанавливает все необходимые обработчики на новую форму редактирования
+    this._setInnerHandlers();
+    this.setRollupButtonClickHandler(this._callback.rollupButtonClick);
+    this.setSubmitButtonClickHandler(this._callback.submitButtonClick);
+
+  }
+
+  _setInnerHandlers() { //вешает "внутренние" обработчики на форму редактирования
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeFieldsetChangeHandler); //вешает обработчик на fieldset выбора типа точки
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._destinationInputChangeHandler); //вешает обработчик на input ввода названия города
   }
 }
