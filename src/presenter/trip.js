@@ -4,8 +4,9 @@ import EventsListView from '../view/events-list.js';
 import {render, RenderPosition} from '../utils/render.js';
 import PointPresenter from './point.js';
 import { updateItem } from '../utils/common.js';
-import { SortType } from '../utils/const.js';
+import { BlankPoint, SortType } from '../utils/const.js';
 import { sortByDateFrom, sortByPrice, sortByDuration } from '../utils/route.js';
+import EditForm from '../view/edit-form.js';
 
 export default class Trip {
   constructor(tripContainer) {
@@ -15,6 +16,7 @@ export default class Trip {
     this._eventsListComponent = new EventsListView();
     this._pointPresenters = {};
     //this._currentSortType = SortType.BY_DATE_FROM;
+    this._addFormComponent = new EditForm();
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
@@ -31,6 +33,7 @@ export default class Trip {
     } else {
       this._renderSort();
       this._renderEventsList();
+//      this._renderAddForm();
       this._renderPoints();
     }
   }
@@ -60,6 +63,10 @@ export default class Trip {
     this._renderPoints();
   }
 
+  _renderAddForm() {
+    render(this._eventsListComponent, this._addFormComponent, RenderPosition.AFTERBEGIN);
+  }
+
   _renderSort() {
     render(this._tripContainer, this._sortingComponent, RenderPosition.AFTERBEGIN);
     this._sortingComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
@@ -72,6 +79,7 @@ export default class Trip {
   }
 
   _renderPoints() {
+    this._renderPoint(BlankPoint);
     this._points.slice().forEach((point) => this._renderPoint(point));
   }
 

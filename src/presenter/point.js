@@ -1,6 +1,7 @@
 import PointView from '../view/point';
 import EditFormView from '../view/edit-form.js';
 import { render, RenderPosition, replace, remove } from '../utils/render';
+import { BlankPoint } from '../utils/const';
 
 const Mode = { // определяет режим отображения - точка или форма редактирования
   DEFAULT: 'DEFAULT',
@@ -24,7 +25,8 @@ export default class Point {
 
   init(point) {
     this._point = point;
-
+// console.log(this._point.id);
+// console.log(BlankPoint.id);
     const prevPointComponent = this._pointComponent;
     const prevEditFormComponent = this._editFormComponent;
 
@@ -35,6 +37,11 @@ export default class Point {
     this._editFormComponent.setEditFormRollupButtonClickHandler(this._handleEditFormToPointClick);
     this._editFormComponent.setEditFormSubmitButtonClickHandler(this._handleEditFormSubmit);
     this._pointComponent.setFavoriteButtonClickHandler(this._handleFavoriteButtonClick);
+
+    if ((prevPointComponent === null || prevEditFormComponent === null) && this._point.id == BlankPoint.id) { // если это форма добавления, то отрисовывается в виде редактирования
+      render(this._eventListContainer, this._editFormComponent, RenderPosition.BEFOREEND);
+      return;
+    }
 
     if (prevPointComponent === null || prevEditFormComponent === null) {
       render(this._eventListContainer, this._pointComponent, RenderPosition.BEFOREEND);

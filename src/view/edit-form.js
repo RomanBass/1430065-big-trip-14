@@ -1,4 +1,4 @@
-import {possibleOffers} from '../mock/point.js';
+import {getOffers, possibleOffers} from '../mock/point.js';
 import {points} from '../main.js';
 import {getCitiesUniqueNames} from '../utils/route.js';
 import { BlankPoint } from '../utils/const.js';
@@ -25,7 +25,7 @@ const createPhotoTemplate = (picture) => { //возвращает образец
   return `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
 };
 
-const createEditFormTemplate = (point) => {
+const createEditFormTemplate = (point = BlankPoint) => {
   const {destination, basePrice, type, dateFrom, dateTo, offers} = point;
   const {description, name, pictures} = destination;
 
@@ -223,7 +223,10 @@ export default class EditForm extends AbstractView {
 
   setEditFormRollupButtonClickHandler(callback) {
     this._callback.editFormRollupButtonClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editFormRollupButtonClickHandler);
+    const editRollupButton = this.getElement().querySelector('.event__rollup-btn');
+    if (editRollupButton !== null) { // чтоб не выдавало ошибку при отрисовке формы добавления
+      editRollupButton.addEventListener('click', this._editFormRollupButtonClickHandler);
+    }
   }
 
   _editFormSubmitButtonClickHandler(evt) {
@@ -260,6 +263,7 @@ export default class EditForm extends AbstractView {
   _typeFieldsetChangeHandler(evt) { //обработчик fieldset по изменению типа точки
     this.updateData({
       type: evt.target.value,
+      offers: getOffers(evt.target.value),
     });
   }
 
@@ -271,9 +275,8 @@ export default class EditForm extends AbstractView {
 
   restoreHandlers() { //восстанавливает все необходимые обработчики на новую форму редактирования
     this._setInnerHandlers();
-    this.setRollupButtonClickHandler(this._callback.rollupButtonClick);
-    this.setSubmitButtonClickHandler(this._callback.submitButtonClick);
-
+    this.setEditFormRollupButtonClickHandler(this._callback.editFormRollupButtonClick);
+    this.setEditFormSubmitButtonClickHandler(this._callback.editFormSubmitButtonClick);
   }
 
   _setInnerHandlers() { //вешает "внутренние" обработчики на форму редактирования

@@ -15,7 +15,7 @@ const getPossibleOffers = (Titles) => { // формирует объект во�
 
 export const possibleOffers = (getPossibleOffers(OfferTitles));
 
-const getPictures = () => { // создание массива объектов фотографий с описаниями
+export const getPictures = () => { // создание массива объектов фотографий с описаниями
   const pictures = [];
   let descriptions = PHOTO_DESCRIPTIONS;
   for (let i = 0; i < getRandomInteger(0, 5); i++) {
@@ -43,7 +43,7 @@ export const getOffers = (type) => { // создание массива объе
   return offers;
 };
 
-const getDescription = () => { // создание описания соединением случайно выбираемых предложений из их массива
+export const getDescription = () => { // создание описания соединением случайно выбираемых предложений из их массива
   let description = '';
   let sentances = DESCRIPTION_SENTENCES;
   for (let i = 0; i < getRandomInteger(0, 5); i++) {
