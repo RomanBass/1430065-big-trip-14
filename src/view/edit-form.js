@@ -83,7 +83,7 @@ const createEditFormTemplate = (point = BlankPoint) => {
   if (point.id == BlankPoint.id) { // удаляет стрелку и переименовывает кнопку ресет, если это форма добавления
     isEditForm.ROLLUP_BUTTON_CLASS = 'visually-hidden';
     isEditForm.RESET_BUTTON_NAME = 'Cancel';
-    isEditForm.ADD_FORM_CLASS = 'visually-hidden';
+    isEditForm.ADD_FORM_CLASS = '';
   }
 
   return `<li class="trip-events__item ${isEditForm.ADD_FORM_CLASS}">
