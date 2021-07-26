@@ -33,7 +33,6 @@ export default class Trip {
     } else {
       this._renderSort();
       this._renderEventsList();
-//      this._renderAddForm();
       this._renderPoints();
     }
   }
@@ -61,10 +60,6 @@ export default class Trip {
     this._sortPoints(sortType);
     this._clearPointsList();
     this._renderPoints();
-  }
-
-  _renderAddForm() {
-    render(this._eventsListComponent, this._addFormComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderSort() {
@@ -103,7 +98,6 @@ export default class Trip {
         this._points.sort(sortByDuration);
         break;
     }
-
     //this._currentSortType = sortType;
   }
 }

@@ -25,8 +25,7 @@ export default class Point {
 
   init(point) {
     this._point = point;
-// console.log(this._point.id);
-// console.log(BlankPoint.id);
+
     const prevPointComponent = this._pointComponent;
     const prevEditFormComponent = this._editFormComponent;
 

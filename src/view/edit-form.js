@@ -222,9 +222,10 @@ export default class EditForm extends AbstractView {
   }
 
   setEditFormRollupButtonClickHandler(callback) {
-    this._callback.editFormRollupButtonClick = callback;
+
     const editRollupButton = this.getElement().querySelector('.event__rollup-btn');
-    if (editRollupButton !== null) { // чтоб не выдавало ошибку при отрисовке формы добавления
+    if (editRollupButton !== null) { // чтоб не выдавало ошибку addEventLister от null при отрисовке формы добавления
+      this._callback.editFormRollupButtonClick = callback;
       editRollupButton.addEventListener('click', this._editFormRollupButtonClickHandler);
     }
   }
