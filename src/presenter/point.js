@@ -39,6 +39,7 @@ export default class Point {
 
     if ((prevPointComponent === null || prevEditFormComponent === null) && this._point.id == BlankPoint.id) { // если это форма добавления, то отрисовывается в виде редактирования
       render(this._eventListContainer, this._editFormComponent, RenderPosition.BEFOREEND);
+      this._mode = Mode.EDITING;
       return;
     }
 
@@ -78,7 +79,7 @@ export default class Point {
   }
 
   resetView() {
-    if (this._mode !== Mode.DEFAULT) {
+    if (this._mode !== Mode.DEFAULT && this._point.id != BlankPoint.id) { // && this._point.id != BlankPoint.id ---> чтобы форма добавления не заменялась точкой
       this._replaceEditFormToPoint();
     }
   }
