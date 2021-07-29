@@ -2,8 +2,8 @@ import {getOffers, possibleOffers} from '../mock/point.js';
 import {points} from '../main.js';
 import {getCitiesUniqueNames} from '../utils/route.js';
 import { BlankPoint } from '../utils/const.js';
-import AbstractView from './abstract.js';
 import { getDescription, getPictures } from '../mock/point.js';
+import SmartView from './smart.js';
 
 const createDataListTemplate = (cityName) => { //возвращает образец ДОМ элемента в datalist наименований городов
   return `<option value="${cityName}"></option>`;
@@ -200,11 +200,10 @@ const createEditFormTemplate = (point = BlankPoint) => {
 </li>`;
 };
 
-export default class EditForm extends AbstractView {
+export default class EditForm extends SmartView {
   constructor(point) {
     super();
-    this._point = point;
-
+    this._data = point; // this._point заменён на this._data чтобы отнаследоваться от SmartView
     this._editFormRollupButtonClickHandler = this._editFormRollupButtonClickHandler.bind(this);
     this._editFormSubmitButtonClickHandler = this._editFormSubmitButtonClickHandler.bind(this);
     this._typeFieldsetChangeHandler = this._typeFieldsetChangeHandler.bind(this);
@@ -213,7 +212,7 @@ export default class EditForm extends AbstractView {
   }
 
   getTemplate() {
-    return createEditFormTemplate(this._point);
+    return createEditFormTemplate(this._data);
   }
 
   _editFormRollupButtonClickHandler(evt) {
@@ -232,33 +231,12 @@ export default class EditForm extends AbstractView {
 
   _editFormSubmitButtonClickHandler(evt) {
     evt.preventDefault();
-    this._callback.editFormSubmitButtonClick(this._point);
+    this._callback.editFormSubmitButtonClick(this._data);
   }
 
   setEditFormSubmitButtonClickHandler(callback) {
     this._callback.editFormSubmitButtonClick = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._editFormSubmitButtonClickHandler);
-  }
-
-  updateElement() { //генерирует новый дом элемент, заменяет им старый, удаляет старый
-    const prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-    const newElement = this.getElement();
-    parent.replaceChild(newElement, prevElement);
-    this.restoreHandlers(); //восстанавливает обработчики
-  }
-
-  updateData(update) { //обновляет данные точки
-    if (!update) {
-      return;
-    }
-    this._point = Object.assign(
-      {},
-      this._point,
-      update,
-    );
-    this.updateElement();
   }
 
   _typeFieldsetChangeHandler(evt) { //обработчик fieldset по изменению типа точки
